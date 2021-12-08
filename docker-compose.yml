@@ -18,6 +18,8 @@ services:
     restart: always
     ports:
       - 2222:2222
+    depends_on:
+      - db
     links:
       - db
 

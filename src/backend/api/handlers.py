@@ -1,5 +1,7 @@
 import logging
 from fastapi import FastAPI, Response, status, UploadFile, File
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from db.manager import DbManager
 from .utils import *
@@ -8,6 +10,10 @@ import random
 
 
 def apply_handlers(app: FastAPI, db: DbManager):
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request, exc):
+        return JSONResponse(error_response(str(exc)), status_code=422)
+
     @app.get("/test", status_code=200, response_model=DefaultResponseModel[dict], include_in_schema=False)
     def test_handler():
         return success_response({'result': 'ok'})
