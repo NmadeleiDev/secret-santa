@@ -1,0 +1,8 @@
+{
+  "name": "Secret santa",
+  "short_name": "Secret santa",
+  "icons": [],
+  "theme_color": "#EF233C",
+  "background_color": "#EDF2F4",
+  "display": "standalone"
+}
