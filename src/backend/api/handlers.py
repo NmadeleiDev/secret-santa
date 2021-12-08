@@ -20,7 +20,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
 
     # USER
     @app.get("/user/{user_id}/info", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[UserModel])
-    def get_user_info(user_id: int, response: Response):
+    def get_user_info(user_id: str, response: Response):
         """
         Данные пользователя
         """
@@ -31,7 +31,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         return success_response(info)
 
     @app.get("/user/{user_id}/recipient", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[UserModel])
-    def get_user_recipient(user_id: int, response: Response):
+    def get_user_recipient(user_id: str, response: Response):
         """
         Данные пользователя, которму данные пользователь дарит подарок
         """
@@ -51,10 +51,10 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to get user recipient info')
         return success_response(rinfo)
 
-    @app.post("/user", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[int])
+    @app.post("/user", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
     def create_user(body: UserModel, response: Response):
         """
-        Создание пользователя, возвращает его id
+        Создание пользователя, возвращает его id (код)
         """
         uid, ok = db.insert_user(name=body.name, room_id=body.room_id, likes=body.likes, dislikes=body.dislikes)
         if ok is False:
@@ -65,7 +65,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
 
     # ROOM
     @app.get("/room/{room_id}/name", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def get_room_name(room_id: int, response: Response):
+    def get_room_name(room_id: str, response: Response):
         """
         Имя команты
         """
@@ -76,7 +76,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         return success_response(name)
 
     @app.get("/room/{room_id}/lock", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def lock_name(room_id: int, response: Response):
+    def lock_name(room_id: str, response: Response):
         """
         Залочить комнату
         """
@@ -111,7 +111,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to lock room')
         return success_response('OK')
 
-    @app.post("/room", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[int])
+    @app.post("/room", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
     def create_room(body: RoomModel, response: Response):
         """
         Создание комнаты, возвращает ее id. Автоматически добавляет создателя в комнату.
@@ -128,8 +128,8 @@ def apply_handlers(app: FastAPI, db: DbManager):
 
         return success_response(rid)
 
-    @app.post("/room/{room_id}/users", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[List[str]])
-    def get_room_users(room_id: int, response: Response):
+    @app.get("/room/{room_id}/users", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[List[str]])
+    def get_room_users(room_id: str, response: Response):
         """
         Получение имен участников данной команты (для админа команты) 
         """

@@ -10,11 +10,11 @@ class DefaultResponseModel(GenericModel, Generic[DataT]):
     data: Optional[DataT]
 
 class UserModel(BaseModel):
-    room_id: int = -1
+    room_id: str = ''
     name: str
     likes: List[str] = []
     dislikes: List[str] = []
 
 class RoomModel(BaseModel):
     name: str
-    admin_id: int
+    admin_id: str

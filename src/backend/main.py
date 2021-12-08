@@ -12,7 +12,6 @@ logging.basicConfig(format='%(asctime)s %(message)s',
 db = DbManager()
 db.create_tables()
 
-
 app = FastAPI(
     title="Secret Santa API",
     description='API docs for secret Santa backend',
