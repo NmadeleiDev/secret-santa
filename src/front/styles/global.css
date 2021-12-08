@@ -1,0 +1,68 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  transition: 0.3s;
+}
+
+body {
+  font-family: 'Nunito', 'Roboto', sans-serif;
+  -moz-font-feature-settings: 'pnum' on, 'lnum' on;
+  -ms-font-feature-settings: 'pnum' on, 'lnum' on;
+  -o-font-feature-settings: 'pnum' on, 'lnum' on;
+  -webkit-font-feature-settings: 'pnum' on, 'lnum' on;
+  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-variant-numeric: lining-nums;
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(100%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tooltipBlock {
+  max-width: 160px;
+  font: var(--descriptions-text-mobile);
+  text-align: center;
+}
+
+.tooltipWrapper {
+  padding: 12px !important;
+  opacity: 1 !important;
+}
+
+@media (min-width: 768px) {
+  .mainWrapper {
+    padding: 32px 54px 0;
+
+    /* overflow-x: auto; */
+  }
+}
+
+@media (min-width: 1200px) {
+  .tooltipBlock {
+    max-width: 230px;
+  }
+}

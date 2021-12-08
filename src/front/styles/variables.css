@@ -1,0 +1,45 @@
+:root {
+  /* spacing */
+  --base: 4
+
+  /* fonts */
+  --headers-text-mobile: 800 36px/44px 'Nunito', sans-serif;
+  --descriptions-text-mobile: 600 12px/20px 'Nunito', sans-serif;
+  --interactive-text-mobile: 700 20px/32px 'Nunito', sans-serif;
+  --headers-text-tablet: 800 52px/68px 'Nunito', sans-serif;
+  --descriptions-text-tablet: 600 16px/24px 'Nunito', sans-serif;
+  --interactive-text-tablet: 700 20px/32px 'Nunito', sans-serif;
+  --headers-text: 800 80px/88px 'Nunito', sans-serif;
+  --descriptions-text: 600 20px/32px 'Nunito', sans-serif;
+  --interactive-text: 700 32px/40px 'Nunito', sans-serif;
+
+  /* colors */
+  --primary-color: #EF233C;
+  --secondary-color: #537A5A;
+  --text-color: #2B2D42;
+  --line-color: #8D99AE;
+  --background-color: #EDF2F4;
+  --white-color: #FFFFFF;
+  /* --background-color: #000;
+  --dark-orange-color: #fd3f15;
+  --light-orange-color: #ff6b03;
+  --dark-yellow-color: #ff9850;
+  --light-yellow-color: #fee5ca;
+  --green-color: #519730;
+  --tooltip-color: #000;
+  --light-brown-color: #2e1e12;
+  --middle-brown-color-1: #281609;
+  --middle-brown-color-2: #381f09;
+  --dark-brown-color: #261609;
+  --input-field-color: #141414;
+  --input-placeholder-color: #434343;
+  --alert-text: #fd3f15;
+  --hover-button: #4c260a;
+  --hover-orange-color: #e56003;
+  --active-orange-color: #e66103; */
+
+  /* media */
+  --mobile-width: 360px;
+  --tablet-width: 768px;
+  --desktop-width: 1440px;
+}
