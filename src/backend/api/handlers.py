@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, Response, status, UploadFile, File
 
 from db.manager import DbManager

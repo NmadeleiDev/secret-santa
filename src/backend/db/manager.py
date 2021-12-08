@@ -65,12 +65,12 @@ class DbManager():
 
     @dict_cursor_wrapper
     def get_user_info(self, user_id: int, cursor=None) -> Tuple[dict, bool]:
-        query = """SELECT id, name, likes, dislikes FROM santa.user WHERE id=%s"""
+        query = """SELECT id, room_id, name, likes, dislikes FROM santa.user WHERE id=%s"""
 
         cursor.execute(query, (user_id, ))
 
         try:
-            res = cursor.fetchall()[0][0]
+            res = dict(cursor.fetchall()[0])
             return res, True
         except Exception as e:
             logging.error("Failed to get user info: {}".format(e))
