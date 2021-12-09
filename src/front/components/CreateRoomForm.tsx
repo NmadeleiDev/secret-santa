@@ -10,6 +10,7 @@ import React from 'react';
 import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { IRoom } from 'types/RoomType';
+import { userSelector } from 'store/feaures/user';
 
 export interface Values {
   name: string;
@@ -24,7 +25,7 @@ const StyledForm = styled(Form)`
 export const CreateRoomForm = () => {
   const router = useRouter();
   const { putItem } = useLocalStorage();
-  const user = useAppSelector((state) => state.user);
+  const user = useAppSelector(userSelector);
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(2, 'Минимум 2 символа')

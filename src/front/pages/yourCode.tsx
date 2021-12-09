@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { mainPageData } from 'data/strings';
+import { userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const StyledDiv = styled.div`
 
 const YourCode: NextPage = () => {
   const router = useRouter();
-  const { id, name } = useAppSelector((state) => state.user);
+  const { id, name } = useAppSelector(userSelector);
   const link = `${protocol}://${host}:${port}/login?id=${id}&name=${name}`;
 
   useEffect(() => {

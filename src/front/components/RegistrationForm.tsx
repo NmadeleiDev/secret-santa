@@ -1,13 +1,13 @@
+import React from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import styled from 'styled-components';
 import * as Yup from 'yup';
+import { useRouter } from 'next/router';
 import { TextInput } from './Input';
 import Button from './Button';
 import { api, IApiResponse } from 'axiosConfig';
-import { useRouter } from 'next/router';
 import { useAppDispatch } from 'store/store';
 import { setUser } from 'store/feaures/user';
-import React from 'react';
 import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 

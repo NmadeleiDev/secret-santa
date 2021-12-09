@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from 'store/store';
 import { IUser } from 'types/UserType';
 
 export interface IUserSlice extends IUser {
@@ -25,6 +26,8 @@ const userSlice = createSlice({
     },
   },
 });
+
+export const userSelector = (state: RootState) => state.user;
 
 export default userSlice.reducer;
 export const { setUser, resetUser } = userSlice.actions;
