@@ -5,7 +5,17 @@ export const mainPageData = {
   description: 'Поделись новогодним настроением с друзьями',
   mainButton: 'Войти в комнату',
   registerButton: 'Зарегистрироваться',
-  fabToolpip: 'Кто такой "Тайный санта"?'
+  fabToolpip: 'Кто такой "Тайный санта"?',
+  regForm: 'Форма регистрации',
+  create: 'Создать',
+  back: 'Назад',
+  yourCode: 'Твой персональный код:',
+  yourLink:
+    'Он пригодится тебе для входа на сайт. Также ты можешь воспользоваться ссылкой:',
+  roomTitle: 'Выбор комнаты',
+  loginHeader: 'Кто ты?',
+  loginEnter: 'Войти',
+  room: 'Твоя комната',
 };
 
 export const mockMeta: MetaType = {

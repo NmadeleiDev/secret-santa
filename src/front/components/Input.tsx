@@ -22,7 +22,6 @@ const StyledTextInput = styled.div`
   }
   .error {
     border: 1px solid ${({ theme }) => theme.colors.primary.main};
-    /* outline: none; */
   }
   .text-error {
     margin-top: 0.3rem;

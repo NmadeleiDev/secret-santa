@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { BiCopy, BiCheck } from 'react-icons/bi';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'text';
@@ -29,3 +32,45 @@ const Button = styled.button<ButtonProps>`
 `;
 
 export default Button;
+
+interface CopyButtonProps {
+  text: string;
+}
+
+const StyledDiv = styled.div`
+  .icon {
+    height: 30px;
+    width: 30px;
+    padding: 0.3rem;
+    font-size: 1.6rem;
+    border-radius: 5px;
+    border: 1px solid transparent;
+  }
+  &:hover .icon {
+    color: ${({ theme }) => theme.colors.secondary.dark};
+    border: 1px solid ${({ theme }) => theme.colors.secondary.dark};
+  }
+
+  .success {
+    color: ${({ theme }) => theme.colors.secondary.dark};
+  }
+`;
+
+export const CopyButton = ({ text }: CopyButtonProps) => {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000);
+  };
+  return (
+    <StyledDiv>
+      <CopyToClipboard text={text} onCopy={handleCopy}>
+        {copied ? (
+          <BiCheck className="icon success" />
+        ) : (
+          <BiCopy className="icon" />
+        )}
+      </CopyToClipboard>
+    </StyledDiv>
+  );
+};

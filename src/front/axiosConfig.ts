@@ -26,18 +26,6 @@ export const backend = axios.create({
   validateStatus: (status) => status >= 200 && status < 500,
 });
 
-export interface IUser {
-  room_id: number;
-  name: string;
-  likes: string[];
-  dislikes: string[];
-}
-
-export interface IRoom {
-  name: string;
-  admin_id: number;
-}
-
 export interface IApiResponse<T> {
   status: boolean;
   error: string | null;
