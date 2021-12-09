@@ -7,50 +7,46 @@ import { api, IApiResponse } from 'axiosConfig';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from 'store/store';
 import { setUser } from 'store/feaures/user';
-import React from 'react';
+import React, { useState } from 'react';
+import { IUser } from 'types/UserType';
 import { mainPageData } from 'data/strings';
-import { useLocalStorage } from 'hooks/useLocalStorage';
-
-const LOCALSTORAGE_KEY =
-  process.env.NEXT_APP_LOCALSTORAGE_KEY || 'SECRET_SANTA_CODE';
 
 export interface Values {
-  name: string;
+  id: string;
 }
 
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .error {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
-export const RegistrationForm = () => {
+export const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { putItem } = useLocalStorage();
+  const [error, setError] = useState<string | null>(null);
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов')
-      .required('Введите имя'),
+    id: Yup.string().required('Введите персональный код'),
   });
-  const initialValues: Values = { name: '' };
+  const initialValues: Values = { id: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
-    const user = {
-      room_id: -1,
-      name: values.name,
-      likes: [],
-      dislikes: [],
-    };
-    const { data } = await api.post<IApiResponse<string>>('/user', user);
+    const { data } = await api.get<IApiResponse<IUser>>(
+      `/user/${values.id}/info`,
+    );
     setSubmitting(false);
     if (data.data) {
-      putItem('id', data.data);
-      dispatch(setUser({ ...user, id: data.data }));
-      router.push('/yourCode');
+      dispatch(setUser({ ...data.data, id: values.id }));
+      setError(null);
+      router.push('/room');
+    } else {
+      setError('Пользователь не найден');
     }
   };
   const handleBack = (e: React.FormEvent) => {
@@ -64,14 +60,15 @@ export const RegistrationForm = () => {
       onSubmit={onSubmitHandler}
     >
       <StyledForm>
-        <h2>{mainPageData.regForm}</h2>
-        <TextInput name="name" type="text" placeholder="Имя пользователя" />
+        <h2>{mainPageData.loginHeader}</h2>
+        <TextInput name="id" type="text" placeholder="Id пользователя" />
         <div className="buttons">
-          <Button variant="primary">{mainPageData.create}</Button>
+          <Button variant="primary">{mainPageData.loginEnter}</Button>
           <Button onClick={handleBack} variant="text">
             {mainPageData.back}
           </Button>
         </div>
+        {error && <div className="error">{error}</div>}
       </StyledForm>
     </Formik>
   );

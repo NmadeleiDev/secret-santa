@@ -25,6 +25,7 @@ up-it: ## build & start the project (docker-compose)
 down: ## stop the project (docker-compose)
 	docker-compose down
 
+re: down up
 # === BACKEND ===
 
 

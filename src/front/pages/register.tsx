@@ -13,9 +13,7 @@ const Register: NextPage = (props: Props) => {
         <title>Регистрация</title>
       </Head>
       <MainWrapper>
-        {/* <StyledMain> */}
         <RegistrationForm />
-        {/* </StyledMain> */}
       </MainWrapper>
     </>
   );

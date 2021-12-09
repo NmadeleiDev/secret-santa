@@ -5,6 +5,9 @@ import Button from 'components/Button';
 import { mainPageData } from 'data/strings';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useRouter } from 'next/router';
 
 const StyledMain = styled.main`
   max-width: var(--desctop-width);
@@ -12,7 +15,6 @@ const StyledMain = styled.main`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  /* position: relative; */
 
   .h1 {
     font-size: 3rem;
@@ -24,6 +26,13 @@ const StyledMain = styled.main`
 `;
 
 const Home: NextPage = () => {
+  const { getItem } = useLocalStorage();
+  const router = useRouter();
+  useEffect(() => {
+    const id = getItem('id');
+    console.log({ id });
+    if (id) router.push(`/login?id=${id}`);
+  }, []);
   return (
     <>
       <Head>
@@ -43,7 +52,7 @@ const Home: NextPage = () => {
             </Link>
             <Link href="/register">
               <a>
-                <Button>{mainPageData.registerButton}</Button>
+                <Button variant="outline">{mainPageData.registerButton}</Button>
               </a>
             </Link>
           </section>
