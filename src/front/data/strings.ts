@@ -16,6 +16,7 @@ export const mainPageData = {
   loginHeader: 'Кто ты?',
   loginEnter: 'Войти',
   room: 'Твоя комната',
+  createRoomForm: 'Новая комната',
 };
 
 export const mockMeta: MetaType = {

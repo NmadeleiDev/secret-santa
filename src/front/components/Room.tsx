@@ -3,6 +3,7 @@ import { mainPageData } from 'data/strings';
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from 'store/store';
 import styled from 'styled-components';
+import { CreateRoomForm } from './CreateRoomForm';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -14,27 +15,8 @@ const StyledDiv = styled.div`
 
 const Room = () => {
   const user = useAppSelector((state) => state.user);
-  useEffect(() => {
-    const checkRoom = async () => {
-      if (user.room_id === -1) {
-        const { data } = await api.get<IApiResponse<string>>(
-          `/room/${user.room_id}/name`,
-        );
-        console.log({ data });
-
-        // const body = {
-        //     name: user.name + '_table',
-        //     admin_id: user.id
-        //   };
-        // const { data } = await api.get<IApiResponse<string>>('/room', body);
-      }
-    };
-    checkRoom();
-  }, []);
-
   if (user.room_id == -1) {
-    // return <CreateRoomForm />
-    return null;
+    return <CreateRoomForm />;
   }
   return (
     <StyledDiv>

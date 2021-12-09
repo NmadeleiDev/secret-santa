@@ -1,8 +1,9 @@
 import { Fab } from 'components/Fab';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { mainPageData } from 'data/strings';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -41,6 +42,14 @@ const StyledDiv = styled.div`
 `;
 
 export const MainWrapper: React.FC = ({ children }) => {
+  const { getItem, login } = useLocalStorage();
+  useEffect(() => {
+    const id = getItem('id');
+    console.log({ id });
+    id && login(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <StyledDiv className=".mainWrapper">
       {children}

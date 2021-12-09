@@ -26,13 +26,6 @@ const StyledMain = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const { getItem } = useLocalStorage();
-  const router = useRouter();
-  useEffect(() => {
-    const id = getItem('id');
-    console.log({ id });
-    if (id) router.push(`/login?id=${id}`);
-  }, []);
   return (
     <>
       <Head>

@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from 'types/UserType';
 
 export interface IUserSlice extends IUser {
-  id?: string;
+  id: string;
 }
 
 const initialState: IUserSlice = {
-  id: undefined,
+  id: '',
   room_id: 0,
   name: '',
   likes: [],
