@@ -4,6 +4,8 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useAppSelector } from 'store/store';
+import { userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -42,11 +44,13 @@ const StyledDiv = styled.div`
 `;
 
 export const MainWrapper: React.FC = ({ children }) => {
+  const { id } = useAppSelector(userSelector);
   const { getItem, login } = useLocalStorage();
   useEffect(() => {
-    const id = getItem('id');
-    console.log({ id });
-    id && login(id);
+    if (id) return;
+    const userId = getItem('id');
+    console.log({ userId });
+    userId && login(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
