@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 import { TextInput } from './Input';
 import Button from './Button';
-import { api, IApiResponse } from 'axiosConfig';
+import { IApiResponse, makePostRequest } from 'axiosConfig';
 import { useRouter } from 'next/router';
 import { useAppSelector } from 'store/store';
 import React from 'react';
@@ -41,12 +41,11 @@ export const CreateRoomForm = () => {
       name: values.name,
       admin_id: user.id,
     };
-    const { data } = await api.post<IApiResponse<string>>('/room', room);
+    const roomId = await makePostRequest<IApiResponse<string>>('/room', room);
     setSubmitting(false);
-    console.log(data);
 
-    if (data.data) {
-      putItem('roomId', data.data);
+    if (roomId?.data) {
+      putItem('roomId', roomId.data);
     }
   };
   const handleBack = (e: React.FormEvent) => {

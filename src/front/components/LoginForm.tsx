@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 import { TextInput } from './Input';
 import Button from './Button';
-import { api, IApiResponse } from 'axiosConfig';
+import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from 'store/store';
 import { setUser } from 'store/feaures/user';
@@ -21,7 +21,8 @@ const StyledForm = styled(Form)`
   align-items: center;
 
   .error {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary.main};
+    font-size: 1rem;
   }
 `;
 
@@ -37,16 +38,16 @@ export const LoginForm = () => {
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
-    const { data } = await api.get<IApiResponse<IUser>>(
+    const user = await makeGetRequest<IApiResponse<IUser>>(
       `/user/${values.id}/info`,
     );
     setSubmitting(false);
-    if (data.data) {
-      dispatch(setUser({ ...data.data, id: values.id }));
+    if (user?.data) {
+      dispatch(setUser({ ...user.data, id: values.id }));
       setError(null);
       router.push('/room');
     } else {
-      setError('Пользователь не найден');
+      setError(mainPageData.userNotFound);
     }
   };
   const handleBack = (e: React.FormEvent) => {

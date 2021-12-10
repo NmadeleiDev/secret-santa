@@ -8,7 +8,7 @@ export interface IUserSlice extends IUser {
 
 const initialState: IUserSlice = {
   id: '',
-  room_id: 0,
+  room_id: '',
   name: '',
   likes: [],
   dislikes: [],
@@ -21,6 +21,9 @@ const userSlice = createSlice({
     setUser(state, { payload }: PayloadAction<IUserSlice>) {
       return { ...state, ...payload };
     },
+    bindRoom(state, { payload }: PayloadAction<string>) {
+      state.room_id = payload;
+    },
     resetUser() {
       return initialState;
     },
@@ -30,4 +33,4 @@ const userSlice = createSlice({
 export const userSelector = (state: RootState) => state.user;
 
 export default userSlice.reducer;
-export const { setUser, resetUser } = userSlice.actions;
+export const { setUser, bindRoom, resetUser } = userSlice.actions;

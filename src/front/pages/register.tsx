@@ -1,16 +1,15 @@
 import { RegistrationForm } from 'components/RegistrationForm';
+import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 
-interface Props {}
-
-const Register: NextPage = (props: Props) => {
+const Register: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Регистрация</title>
+        <title>{mainPageData.registerHeader}</title>
       </Head>
       <MainWrapper>
         <RegistrationForm />

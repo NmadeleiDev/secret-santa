@@ -54,13 +54,14 @@ services:
     build:
       context: ./src/front
       dockerfile: Dockerfile
+      args:
+        FRONT_PORT: $FRONT_PORT
+        NEXT_PUBLIC_NGINX_HOST: $NEXT_PUBLIC_NGINX_HOST
+        NEXT_PUBLIC_NGINX_PORT: $FRONT_PORT
+        NEXT_PUBLIC_FRONTEND_PORT: $NEXT_PUBLIC_FRONTEND_PORT
+        NEXT_PUBLIC_FRONTEND_HOST: $NEXT_PUBLIC_FRONTEND_HOST
+        NEXT_PUBLIC_FRONTEND_PROTOCOL: $NEXT_PUBLIC_FRONTEND_PROTOCOL
     env_file:
       - .env
     links:
       - backend
-    # args:
-    #   NEXT_PUBLIC_FRONTEND_HOST: ${NEXT_PUBLIC_FRONTEND_HOST}
-    #   NEXT_PUBLIC_FRONTEND_PROTOCOL: ${NEXT_PUBLIC_FRONTEND_PROTOCOL}
-    # environment:
-    # NEXT_PUBLIC_BACKEND_HOST: startup-guide.ml
-    # NEXT_PUBLIC_PROTOCOL: https

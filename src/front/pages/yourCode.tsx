@@ -1,26 +1,22 @@
-import { MainWrapper } from 'layouts/MainWrapper';
+import { useEffect } from 'react';
+import styled from 'styled-components';
 import { NextPage } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { mainPageData } from 'data/strings';
+import { userSelector } from 'store/feaures/user';
+import { MainWrapper } from 'layouts/MainWrapper';
 import { useAppSelector } from 'store/store';
 import Button, { CopyButton } from 'components/Button';
 
 const host =
   process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_FRONTEND_HOST
-    : 'localhost';
-const port =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_FRONTEND_PORT
-    : '3000';
+    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
+    : 'localhost:2222';
 const protocol =
   process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_PROTOCOL
+    ? process.env.NEXT_PUBLIC_FRONTEND_PROTOCOL
     : 'http';
-import styled from 'styled-components';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { mainPageData } from 'data/strings';
-import { userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -57,7 +53,7 @@ const StyledDiv = styled.div`
 const YourCode: NextPage = () => {
   const router = useRouter();
   const { id, name } = useAppSelector(userSelector);
-  const link = `${protocol}://${host}:${port}/login?id=${id}&name=${name}`;
+  const link = `${protocol}://${host}/login?id=${id}&name=${name}`;
 
   useEffect(() => {
     if (!id) router.replace('/register');
@@ -69,7 +65,7 @@ const YourCode: NextPage = () => {
   return (
     <MainWrapper>
       <StyledDiv>
-        <h2 className="h2">Поздравляем, ты в игре!</h2>
+        <h2 className="h2">{mainPageData.successRegHeader}</h2>
         <p className="p">
           {mainPageData.yourCode}
           <span className="code">
@@ -85,7 +81,7 @@ const YourCode: NextPage = () => {
           </span>
         </p>
         <Button variant="text" onClick={handleClick}>
-          Войти в комнату
+          {mainPageData.enterRoom}
         </Button>
       </StyledDiv>
     </MainWrapper>

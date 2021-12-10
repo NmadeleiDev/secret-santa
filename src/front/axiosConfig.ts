@@ -2,14 +2,18 @@ import axios from 'axios';
 export const CancelToken = axios.CancelToken;
 const host =
   process.env.NODE_ENV === 'production'
-    ? `${process.env.NEXT_PUBLIC_FRONTEND_HOST}:2222`
+    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
     : 'localhost:2222';
 const protocol =
   process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_FRONTEND_PROTOCOL
     : 'http';
+const prefix =
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_BACKEND_PREFIX
+    : '';
 
-const baseURL = `${protocol}://${host}/`;
+const baseURL = `${protocol}://${host}${prefix}/`;
 console.log({ baseURL });
 export const api = axios.create({
   baseURL,
@@ -17,6 +21,22 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
   validateStatus: (status) => status >= 200 && status < 500,
 });
+
+export const makeGetRequest = async <T>(url: string): Promise<T> => {
+  return api
+    .get(url)
+    .then((data) => data.data)
+    .catch((e) => console.log(e));
+};
+export const makePostRequest = async <T>(
+  url: string,
+  data: any,
+): Promise<T> => {
+  return api
+    .post(url, data)
+    .then((data) => data.data)
+    .catch((e) => console.log(e));
+};
 
 export interface IApiResponse<T> {
   status: boolean;

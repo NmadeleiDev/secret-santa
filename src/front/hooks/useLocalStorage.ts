@@ -1,10 +1,10 @@
-import { api, IApiResponse } from 'axiosConfig';
+import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
 import { setUser } from 'store/feaures/user';
 import { useAppDispatch } from 'store/store';
 import { IUser } from 'types/UserType';
 
 const LOCALSTORAGE_KEY =
-  process.env.NEXT_APP_LOCALSTORAGE_KEY || 'SECRET_SANTA_DATA';
+  process.env.NEXT_PUBLIC_LOCALSTORAGE_KEY || 'SECRET_SANTA_DATA';
 
 export const useLocalStorage = () => {
   const dispatch = useAppDispatch();
@@ -19,9 +19,9 @@ export const useLocalStorage = () => {
     localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(json));
   };
   const login = async (id: string) => {
-    const { data } = await api.get<IApiResponse<IUser>>(`user/${id}/info`);
-    if (data.data) {
-      dispatch(setUser({ ...data.data, id }));
+    const user = await makeGetRequest<IApiResponse<IUser>>(`user/${id}/info`);
+    if (user?.data) {
+      dispatch(setUser({ ...user.data, id }));
     }
   };
   return { getItem, putItem, login };
