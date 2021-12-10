@@ -1,5 +1,5 @@
 export interface IUser {
-  room_id: number;
+  room_id: string;
   name: string;
   likes: string[];
   dislikes: string[];

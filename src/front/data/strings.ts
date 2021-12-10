@@ -4,7 +4,10 @@ export const mainPageData = {
   title: 'Тайный санта',
   description: 'Поделись новогодним настроением с друзьями',
   mainButton: 'Войти в комнату',
+  registerHeader: 'Регистрация',
   registerButton: 'Зарегистрироваться',
+  successRegHeader: 'Поздравляем, ты в игре!',
+  enterRoom: 'Войти в комнату',
   fabToolpip: 'Кто такой "Тайный санта"?',
   regForm: 'Форма регистрации',
   create: 'Создать',
@@ -17,6 +20,9 @@ export const mainPageData = {
   loginEnter: 'Войти',
   room: 'Твоя комната',
   createRoomForm: 'Новая комната',
+  usersQuantity: 'Количество пользоателей в комнате: ',
+  genericError: 'Упс... Что-то пошло не так',
+  userNotFound: 'Пользователь не найден',
 };
 
 export const mockMeta: MetaType = {
