@@ -70,9 +70,9 @@ class DbManager():
     def get_user_info(self, user_id: str, cursor=None) -> Tuple[dict, bool]:
         query = """SELECT id, room_id, name, likes, dislikes FROM santa.user WHERE id=%s"""
 
-        cursor.execute(query, (user_id, ))
-
         try:
+            cursor.execute(query, (user_id, ))
+
             res = dict(cursor.fetchall()[0])
             return res, True
         except Exception as e:
