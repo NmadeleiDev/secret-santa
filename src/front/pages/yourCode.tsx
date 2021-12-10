@@ -8,15 +8,8 @@ import { userSelector } from 'store/feaures/user';
 import { MainWrapper } from 'layouts/MainWrapper';
 import { useAppSelector } from 'store/store';
 import Button, { CopyButton } from 'components/Button';
-
-const host =
-  process.env.NODE_ENV === 'production'
-    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
-    : 'localhost:2222';
-const protocol =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_FRONTEND_PROTOCOL
-    : 'http';
+import CodeBlock from 'components/CodeBlock';
+import { host, protocol } from './_app';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -30,23 +23,6 @@ const StyledDiv = styled.div`
   .p {
     max-width: var(--desktop-width);
     width: 100%;
-  }
-
-  .code {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.text.dark};
-    background-color: ${({ theme }) => theme.colors.secondary.light};
-    border: 1px solid ${({ theme }) => theme.colors.secondary.dark};
-    border-radius: 5px;
-
-    a {
-      color: ${({ theme }) => theme.colors.text.dark};
-    }
   }
 `;
 
@@ -68,17 +44,14 @@ const YourCode: NextPage = () => {
         <h2 className="h2">{mainPageData.successRegHeader}</h2>
         <p className="p">
           {mainPageData.yourCode}
-          <span className="code">
-            {id}
-            <CopyButton text={id || ''} />
-          </span>
+          <CodeBlock text={id} />
           {mainPageData.yourLink}
-          <span className="code">
+          <CodeBlock text={id}>
             <Link href={link}>
               <a>{link}</a>
             </Link>
             <CopyButton text={link} />
-          </span>
+          </CodeBlock>
         </p>
         <Button variant="text" onClick={handleClick}>
           {mainPageData.enterRoom}
