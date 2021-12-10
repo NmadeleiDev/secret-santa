@@ -38,6 +38,8 @@ export const LoginForm = () => {
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
+    console.log({ values });
+
     const user = await makeGetRequest<IApiResponse<IUser>>(
       `/user/${values.id}/info`,
     );
@@ -46,9 +48,12 @@ export const LoginForm = () => {
       dispatch(setUser({ ...user.data, id: values.id }));
       setError(null);
       router.push('/room');
+      return true;
     } else {
       setError(mainPageData.userNotFound);
+      setTimeout(() => setError(''), 3000);
     }
+    return false;
   };
   const handleBack = (e: React.FormEvent) => {
     e.preventDefault();

@@ -18,7 +18,7 @@ export const mainPageData = {
   roomTitle: 'Выбор комнаты',
   loginHeader: 'Кто ты?',
   loginEnter: 'Войти',
-  room: 'Твоя комната',
+  room: 'Комната ',
   createRoomForm: 'Новая комната',
   usersQuantity: 'Количество пользоателей в комнате: ',
   genericError: 'Упс... Что-то пошло не так',

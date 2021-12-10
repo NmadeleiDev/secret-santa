@@ -5,6 +5,7 @@ import { string } from 'yup/lib/locale';
 
 export interface IRoomSlice extends Partial<IRoom> {
   users?: string[];
+  id?: string;
 }
 
 const initialState: IRoomSlice = {
