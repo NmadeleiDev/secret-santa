@@ -95,7 +95,9 @@ export const CreateRoomForm = () => {
         <TextInput name="name" type="text" placeholder="Название комнаты" />
         {error && <div className="error">{error}</div>}
         <div className="buttons">
-          <Button variant="primary">{mainPageData.create}</Button>
+          <Button type="submit" variant="primary">
+            {mainPageData.create}
+          </Button>
           <Button onClick={handleBack} variant="text">
             {mainPageData.back}
           </Button>
