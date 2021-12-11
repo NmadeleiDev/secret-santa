@@ -38,12 +38,12 @@ const Home: NextPage = () => {
             <p className="description">{mainPageData.description}</p>
           </section>
           <section>
-            <Link href="/room">
+            <Link href="/enterroom">
               <a>
                 <Button variant="primary">{mainPageData.mainButton}</Button>
               </a>
             </Link>
-            <Link href="/register">
+            <Link href="/create">
               <a>
                 <Button variant="outline">{mainPageData.registerButton}</Button>
               </a>

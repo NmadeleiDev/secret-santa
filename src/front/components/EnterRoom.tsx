@@ -5,11 +5,13 @@ import { TextInput } from './Input';
 import Button from './Button';
 import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
 import { useRouter } from 'next/router';
-import { useAppDispatch } from 'store/store';
+import { useAppDispatch, useAppSelector } from 'store/store';
 import { setUser } from 'store/feaures/user';
 import React, { useState } from 'react';
 import { IUser } from 'types/UserType';
 import { mainPageData } from 'data/strings';
+import { errorSelector, setError } from 'store/feaures/error';
+import { setRoom } from 'store/feaures/room';
 
 export interface Values {
   id: string;
@@ -26,12 +28,12 @@ const StyledForm = styled(Form)`
   }
 `;
 
-export const LoginForm = () => {
+export const EnterRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [error, setError] = useState<string | null>(null);
+  const { error } = useAppSelector(errorSelector);
   const validationSchema = Yup.object({
-    id: Yup.string().required('Введите персональный код'),
+    id: Yup.string().required('Введите код комнаты'),
   });
   const initialValues: Values = { id: '' };
   const onSubmitHandler = async (
@@ -40,20 +42,16 @@ export const LoginForm = () => {
   ) => {
     console.log({ values });
 
-    const user = await makeGetRequest<IApiResponse<IUser>>(
-      `/user/${values.id}/info`,
+    const roomName = await makeGetRequest<IApiResponse<IUser>>(
+      `/room/${values.id}/name`,
     );
     setSubmitting(false);
-    if (user?.data) {
-      dispatch(setUser({ ...user.data, id: values.id }));
-      setError(null);
-      router.push('/room');
-      return true;
+    if (roomName?.data) {
+      dispatch(setRoom({ id: values.id }));
+      router.push('/register');
     } else {
-      setError(mainPageData.userNotFound);
-      setTimeout(() => setError(''), 3000);
+      dispatch(setError(mainPageData.roomNotFound));
     }
-    return false;
   };
   const handleBack = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,10 +64,10 @@ export const LoginForm = () => {
       onSubmit={onSubmitHandler}
     >
       <StyledForm>
-        <h2>{mainPageData.loginHeader}</h2>
-        <TextInput name="id" type="text" placeholder="Id пользователя" />
+        <h2>{mainPageData.enterRoomHeader}</h2>
+        <TextInput name="id" type="text" placeholder="Код комнаты" />
         <div className="buttons">
-          <Button variant="primary">{mainPageData.loginEnter}</Button>
+          <Button variant="primary">{mainPageData.enter}</Button>
           <Button onClick={handleBack} variant="text">
             {mainPageData.back}
           </Button>

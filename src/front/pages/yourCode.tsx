@@ -7,9 +7,10 @@ import { mainPageData } from 'data/strings';
 import { userSelector } from 'store/feaures/user';
 import { MainWrapper } from 'layouts/MainWrapper';
 import { useAppSelector } from 'store/store';
-import Button, { CopyButton } from 'components/Button';
+import Button from 'components/Button';
 import CodeBlock from 'components/CodeBlock';
-import { host, protocol } from './_app';
+import { roomSelector } from 'store/feaures/room';
+import { getUserLink, getRoomLink } from 'utils';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -28,29 +29,46 @@ const StyledDiv = styled.div`
 
 const YourCode: NextPage = () => {
   const router = useRouter();
-  const { id, name } = useAppSelector(userSelector);
-  const link = `${protocol}://${host}/login?id=${id}&name=${name}`;
+  const user = useAppSelector(userSelector);
+  const room = useAppSelector(roomSelector);
 
   useEffect(() => {
-    if (!id) router.replace('/register');
-  }, [id, router]);
+    if (!user.id || !room.id) {
+      router.replace('/');
+    }
+  }, [user.id, room.id, router]);
+
+  if (!user.id || !room.id) {
+    return null;
+  }
 
   const handleClick = () => {
     router.push('/room');
   };
+
+  const userlink = getUserLink(user.id);
+  const roomlink = getRoomLink(room.id);
+
   return (
     <MainWrapper>
       <StyledDiv>
         <h2 className="h2">{mainPageData.successRegHeader}</h2>
         <p className="p">
           {mainPageData.yourCode}
-          <CodeBlock text={id} />
+          <CodeBlock text={user.id} />
           {mainPageData.yourLink}
-          <CodeBlock text={id}>
-            <Link href={link}>
-              <a>{link}</a>
+          <CodeBlock text={userlink}>
+            <Link href={userlink}>
+              <a>{userlink}</a>
             </Link>
-            <CopyButton text={link} />
+          </CodeBlock>
+          {mainPageData.yourRoomCode}
+          <CodeBlock text={room.id} />
+          {mainPageData.yourRoomLink}
+          <CodeBlock text={roomlink}>
+            <Link href={roomlink}>
+              <a>{roomlink}</a>
+            </Link>
           </CodeBlock>
         </p>
         <Button variant="text" onClick={handleClick}>

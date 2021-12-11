@@ -2,11 +2,14 @@ import { IApiResponse, makeGetRequest } from 'axiosConfig';
 import { mainPageData } from 'data/strings';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { setError, setSuccess } from 'store/feaures/error';
 import { roomSelector, setRoom } from 'store/feaures/room';
 import { userSelector } from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
+import { getRoomLink } from 'utils';
 import Button from './Button';
+import CodeBlock from './CodeBlock';
 import { CreateRoomForm } from './CreateRoomForm';
 import User from './User';
 
@@ -21,8 +24,8 @@ const StyledDiv = styled.div`
     font-size: 2.5rem;
   }
   .info {
-      display: flex;
-      flex-direction: column;
+    display: flex;
+    flex-direction: column;
   }
   .users {
     display: flex;
@@ -39,10 +42,10 @@ const Room = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
   const room = useAppSelector(roomSelector);
-  const [state, setState] = useState({ success: false, error: '' });
 
   useEffect(() => {
     if (user.room_id === '') return;
+
     const getRoomInfo = async (id: string) => {
       const room = await makeGetRequest<IApiResponse<string>>(
         `/room/${id}/name`,
@@ -53,9 +56,11 @@ const Room = () => {
       if (room?.data && users?.data) {
         dispatch(setRoom({ name: room.data, users: users.data }));
       } else {
-        setState((state) => ({ ...state, error: mainPageData.genericError }));
+        dispatch(setError(mainPageData.genericError));
+        setTimeout(() => dispatch(setError('')));
       }
     };
+
     getRoomInfo(user.room_id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,12 +75,9 @@ const Room = () => {
     );
     console.log({ lock });
     if (lock?.data) {
-      setState((state) => ({ ...state, success: true }));
+      dispatch(setSuccess('Ура! Пары назначены!'));
     } else {
-      setState((state) => ({
-        ...state,
-        error: lock?.error || mainPageData.genericError,
-      }));
+      dispatch(setError(mainPageData.genericError));
     }
   };
 
@@ -93,10 +95,10 @@ const Room = () => {
       <span className="info">
         {mainPageData.usersQuantity} {room.users?.length}
         {room?.admin_id === user.id && (
-        <div className="link">
+          <div className="invie">
             Ссылка для приглашения в комнату:
-            <span className="code"></span>
-        </div>
+            <CodeBlock text={getRoomLink(user.room_id)} />
+          </div>
         )}
       </span>
       <div className="users">

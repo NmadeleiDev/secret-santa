@@ -1,4 +1,3 @@
-import { LoginForm } from 'components/LoginForm';
 import Room from 'components/Room';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
@@ -17,7 +16,9 @@ const RoomPage: NextPage = (props: Props) => {
       <Head>
         <title>{mainPageData.roomTitle}</title>
       </Head>
-      <MainWrapper>{user.id ? <Room /> : <LoginForm />}</MainWrapper>
+      <MainWrapper>
+        <Room />
+      </MainWrapper>
     </>
   );
 };

@@ -7,7 +7,9 @@ import { store } from 'store/store';
 
 export const host =
   process.env.NODE_ENV === 'production'
-    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
+    ? process.env.NEXT_PUBLIC_NGINX_PORT === '80'
+      ? `${process.env.NEXT_PUBLIC_NGINX_HOST}`
+      : `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
     : 'localhost:3001';
 export const protocol =
   process.env.NODE_ENV === 'production'

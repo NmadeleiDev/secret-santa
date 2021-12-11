@@ -1,0 +1,21 @@
+import { EnterRoomForm } from 'components/EnterRoom';
+import { mainPageData } from 'data/strings';
+import { MainWrapper } from 'layouts/MainWrapper';
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+
+const CreateRoom: NextPage = () => {
+  return (
+    <>
+      <Head>
+        <title>{mainPageData.registerHeader}</title>
+      </Head>
+      <MainWrapper>
+        <EnterRoomForm />
+      </MainWrapper>
+    </>
+  );
+};
+
+export default CreateRoom;

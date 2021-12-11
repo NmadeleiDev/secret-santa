@@ -10,57 +10,74 @@ import React from 'react';
 import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { IRoom } from 'types/RoomType';
-import { userSelector } from 'store/feaures/user';
+import { setUser, userSelector } from 'store/feaures/user';
 import { roomSelector, setRoom } from 'store/feaures/room';
 import CodeBlock from './CodeBlock';
 import { host, protocol } from 'pages/_app';
+import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 
 export interface Values {
-  name: string;
+  username: string;
+  roomname: string;
 }
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .error {
+    color: ${({ theme }) => theme.colors.primary.main};
+    font-size: 1rem;
+  }
 `;
 
 export const CreateRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { putItem } = useLocalStorage();
-  const user = useAppSelector(userSelector);
-  const room = useAppSelector(roomSelector);
+  const { error } = useAppSelector(errorSelector);
 
   const validationSchema = Yup.object({
-    name: Yup.string()
+    username: Yup.string()
+      .min(2, 'Минимум 2 символа')
+      .max(50, 'Максимум 50 символов')
+      .required('Введите имя'),
+    roomname: Yup.string()
       .min(2, 'Минимум 2 символа')
       .max(50, 'Максимум 50 символов')
       .required('Введите имя'),
   });
-  const initialValues: Values = { name: '' };
+  const initialValues: Values = { username: '', roomname: '' };
+
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
-    const roomData: IRoom = {
-      name: values.name,
-      admin_id: user.id,
+    const user = {
+      room_id: '',
+      name: values.username,
+      likes: [],
+      dislikes: [],
     };
-    const roomId = await makePostRequest<IApiResponse<string>>(
-      '/room',
-      roomData,
-    );
+    const userId = await makePostRequest<IApiResponse<string>>('/user', user);
+
+    if (userId.error || !userId.data) {
+      dispatch(setError(mainPageData.genericError));
+      return;
+    }
+    const room: IRoom = {
+      name: values.username,
+      admin_id: userId.data,
+    };
+    const roomId = await makePostRequest<IApiResponse<string>>('/room', room);
     setSubmitting(false);
     console.log({ roomId });
 
     if (roomId?.data) {
       putItem('roomId', roomId.data);
+      dispatch(setUser({ ...user, id: userId.data }));
       dispatch(setRoom({ ...room, id: roomId.data }));
+      router.push('/yourCode');
     }
   };
   const handleBack = (e: React.FormEvent) => {
@@ -68,30 +85,22 @@ export const CreateRoomForm = () => {
     router.back();
   };
   return (
-    <>
-      {room?.id ? (
-        <StyledDiv>
-          <h2>Ваша комната</h2>
-          <CodeBlock text={`${protocol}://${host}/invite/${room.id}`} />
-        </StyledDiv>
-      ) : (
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmitHandler}
-        >
-          <StyledForm>
-            <h2>{mainPageData.createRoomForm}</h2>
-            <TextInput name="name" type="text" placeholder="Название комнаты" />
-            <div className="buttons">
-              <Button variant="primary">{mainPageData.create}</Button>
-              <Button onClick={handleBack} variant="text">
-                {mainPageData.back}
-              </Button>
-            </div>
-          </StyledForm>
-        </Formik>
-      )}
-    </>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmitHandler}
+    >
+      <StyledForm>
+        <h2>{mainPageData.createRoomForm}</h2>
+        <TextInput name="name" type="text" placeholder="Название комнаты" />
+        {error && <div className="error">{error}</div>}
+        <div className="buttons">
+          <Button variant="primary">{mainPageData.create}</Button>
+          <Button onClick={handleBack} variant="text">
+            {mainPageData.back}
+          </Button>
+        </div>
+      </StyledForm>
+    </Formik>
   );
 };

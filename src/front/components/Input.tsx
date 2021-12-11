@@ -10,12 +10,14 @@ export interface ITextInputProps {
 }
 
 const StyledTextInput = styled.div`
+  width: 100%;
   margin: 0.5rem 0;
   .label {
     margin-right: 1rem;
   }
   .text-input {
     padding: 1rem;
+    width: 100%;
     color: ${({ theme }) => theme.colors.text.dark};
     border-radius: 5px;
     border: 1px solid ${({ theme }) => theme.colors.base.line};
