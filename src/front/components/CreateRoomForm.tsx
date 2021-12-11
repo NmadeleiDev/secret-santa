@@ -92,7 +92,8 @@ export const CreateRoomForm = () => {
     >
       <StyledForm>
         <h2>{mainPageData.createRoomForm}</h2>
-        <TextInput name="name" type="text" placeholder="Название комнаты" />
+        <TextInput name="username" type="text" placeholder="Твое имя" />
+        <TextInput name="roomname" type="text" placeholder="Название комнаты" />
         {error && <div className="error">{error}</div>}
         <div className="buttons">
           <Button type="submit" variant="primary">
