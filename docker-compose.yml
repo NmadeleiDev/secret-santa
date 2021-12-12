@@ -49,15 +49,14 @@ services:
     restart: always
 
   front:
-    ports:
-      - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
+    # ports:
+    #   - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
     build:
       context: ./src/front
       dockerfile: Dockerfile
       args:
-        FRONT_PORT: $FRONT_PORT
         NEXT_PUBLIC_NGINX_HOST: $NEXT_PUBLIC_NGINX_HOST
-        NEXT_PUBLIC_NGINX_PORT: $FRONT_PORT
+        NEXT_PUBLIC_NGINX_PORT: $NEXT_PUBLIC_NGINX_PORT
         NEXT_PUBLIC_FRONTEND_PORT: $NEXT_PUBLIC_FRONTEND_PORT
         NEXT_PUBLIC_FRONTEND_HOST: $NEXT_PUBLIC_FRONTEND_HOST
         NEXT_PUBLIC_FRONTEND_PROTOCOL: $NEXT_PUBLIC_FRONTEND_PROTOCOL
