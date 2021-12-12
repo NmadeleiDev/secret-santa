@@ -40,12 +40,12 @@ const Home: NextPage = () => {
           <section>
             <Link href="/enterroom">
               <a>
-                <Button variant="primary">{mainPageData.mainButton}</Button>
+                <Button variant="outline">{mainPageData.enterRoom}</Button>
               </a>
             </Link>
             <Link href="/create">
               <a>
-                <Button variant="outline">{mainPageData.registerButton}</Button>
+                <Button variant="primary">{mainPageData.createRoom}</Button>
               </a>
             </Link>
           </section>

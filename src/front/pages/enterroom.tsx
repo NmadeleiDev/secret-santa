@@ -1,4 +1,4 @@
-import { EnterRoomForm } from 'components/EnterRoom';
+import { EnterRoomForm } from 'components/EnterRoomForm';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
 import { NextPage } from 'next';

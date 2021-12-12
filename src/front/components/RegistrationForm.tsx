@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import styled from 'styled-components';
 import * as Yup from 'yup';
@@ -17,6 +17,8 @@ import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { roomSelector } from 'store/feaures/room';
 import { IUser } from 'types/UserType';
+import { UUID_REGEX } from 'utils';
+import { errorSelector, setError } from 'store/feaures/error';
 
 export interface Values {
   name: string;
@@ -41,39 +43,40 @@ export const RegistrationForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { putItem } = useLocalStorage();
-  const [error, setError] = useState<string | null>(null);
   const room = useAppSelector(roomSelector);
+  const { error } = useAppSelector(errorSelector);
 
+  useEffect(() => {
+    if (!room.id) {
+      console.log('Комната не найдена, попробуйте зайти с главной страницы', {
+        room,
+      });
+      //   dispatch(setError(mainPageData.roomNotFoundGoHome));
+      //   setTimeout(() => dispatch(setError('')), 3000);
+      router.replace('/');
+    }
+  }, []);
+
+  if (!room.id) {
+    return null;
+  }
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(2, 'Минимум 2 символа')
       .max(50, 'Максимум 50 символов')
-      .required('Введите имя или код'),
+      .required('Введите имя'),
   });
   const initialValues: Values = { name: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
-    //   match code
-    if (values.name.match(/^\w{8}-(\w{4}-){3}\w{12}$/)) {
-      const user = await makeGetRequest<IApiResponse<IUser>>(
-        `/user/${values.name}/info`,
-      );
-      setSubmitting(false);
-      if (user?.data) {
-        dispatch(setUser({ ...user.data, id: values.name }));
-        setError(null);
-        router.push('/room');
-      } else {
-        setError(mainPageData.userNotFound);
-        setTimeout(() => setError(''), 3000);
-      }
+    if (!room.id) {
       return;
     }
 
     const user = {
-      room_id: room.id || '',
+      room_id: room.id,
       name: values.name,
       likes: [],
       dislikes: [],
@@ -84,7 +87,7 @@ export const RegistrationForm = () => {
     if (userId?.data) {
       putItem('id', userId.data);
       dispatch(setUser({ ...user, id: userId.data }));
-      router.push('/room');
+      router.push(`/room?userid=${userId.data}&roomid=${room.id}`);
     } else {
       setError(mainPageData.genericError);
     }
@@ -101,12 +104,10 @@ export const RegistrationForm = () => {
     >
       <StyledForm>
         <h2>{mainPageData.regForm}</h2>
-        <p className="p">{mainPageData.regFormText}</p>
-        <TextInput
-          name="name"
-          type="text"
-          placeholder="Имя пользователя или персональный код"
-        />
+        <p className="p">
+          {mainPageData.regFormText}&quot;{room.name}&quot;
+        </p>
+        <TextInput name="name" type="text" placeholder="Имя пользователя" />
         {error && <div className="error">{error}</div>}
         <div className="buttons">
           <Button variant="primary">{mainPageData.create}</Button>

@@ -59,9 +59,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       `room/${roomid}/name`,
     );
     if (roomData?.data) {
-      const users = await makeGetRequest<IApiResponse<string[]>>(
-        `room/${roomid}/users`,
-      );
+      const users = await makeGetRequest<
+        IApiResponse<{ name: string; id: string }[]>
+      >(`room/${roomid}/users`);
+      console.log({ users: users.data });
+
       room = {
         name: roomData.data,
         users: users.data || [],
@@ -77,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const isAdminData = await makeGetRequest<IApiResponse<boolean>>(
       `room/${roomid}/isadmin/${userid}`,
     );
-    console.log({ userData, isAdminData });
+    // console.log({ userData, isAdminData });
 
     if (
       userData.data?.name &&
@@ -92,6 +94,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       };
     }
   }
+  console.log({ user, room });
   return { props: { room, user } };
 };
 
@@ -163,7 +166,7 @@ const RoomPage = ({
           </span>
           <div className="users">
             {room?.users?.map((el, i) => (
-              <User name={el} key={i} />
+              <User name={el.name} key={i} />
             ))}
           </div>
           <div className="buttons">

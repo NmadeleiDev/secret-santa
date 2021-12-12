@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store/store';
 import { IRoom } from 'types/RoomType';
-import { string } from 'yup/lib/locale';
 
 export interface IRoomSlice extends Partial<IRoom> {
-  users?: string[];
+  users?: { name: string; id: string }[];
   id?: string;
 }
 
@@ -20,6 +19,9 @@ const RoomSlice = createSlice({
   reducers: {
     setRoom(state, { payload }: PayloadAction<IRoomSlice>) {
       return { ...state, ...payload };
+    },
+    addUser(state, { payload }: PayloadAction<{ name: string; id: string }>) {
+      state.users?.push(payload);
     },
     resetRoom() {
       return initialState;
