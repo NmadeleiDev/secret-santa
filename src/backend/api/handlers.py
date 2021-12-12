@@ -97,6 +97,17 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to check room admin')
         return success_response(isadm)
 
+    @app.get("/room/{room_id}/ismember/{user_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[bool])
+    def check_room_member(room_id: str, user_id: str, response: Response):
+        """
+        Проверка, участник ли пользователь данной комнаты
+        """
+        isadm, ok = db.check_if_room_admin(room_id, user_id)
+        if ok is False:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('failed to check room admin')
+        return success_response(isadm)
+
     @app.get("/admin/{admin_id}/delete/{user_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
     def check_room_admin(admin_id: str, user_id: str, response: Response):
         """

@@ -148,6 +148,18 @@ class DbManager():
         except Exception as e:
             logging.error("Failed to update room: {}".format(e))
             return [], False
+
+    @cursor_wrapper
+    def check_if_room_member(self, room_id: str, user_id: str, cursor=None) -> Tuple[bool, bool]:
+        query = """SELECT room_id=%s FROM santa.user WHERE id=%s"""
+
+        try:
+            cursor.execute(query, (room_id, user_id))
+            res = cursor.fetchall()[0][0]
+            return res, True
+        except Exception as e:
+            logging.error("Failed to check room admin: {}".format(e))
+            return False, False
     
 
     # CRUD room

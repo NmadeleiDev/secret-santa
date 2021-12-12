@@ -51,6 +51,7 @@ services:
   front:
     # ports:
     #   - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
+    hostname: front
     build:
       context: ./src/front
       dockerfile: Dockerfile
