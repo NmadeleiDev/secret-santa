@@ -33,7 +33,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
     @app.get("/user/{user_id}/enter/{room_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
     def get_user_info(user_id: str, room_id: str, response: Response):
         """
-        Стать участником команты по id
+        Стать участником команты по id (полезно, если тебя по ошибке удалили)
         """
         ok = db.update_user_room_id(user_id, room_id)
         if ok is False:
