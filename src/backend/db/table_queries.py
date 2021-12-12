@@ -6,7 +6,8 @@ create table if not exists santa.room
 	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
 	name varchar default null,
 	admin_user_id uuid REFERENCES santa.user (id),
-	pairs jsonb default null
+	pairs jsonb default null,
+	created_date	date	default now()::date
 );
 """
 
@@ -17,6 +18,7 @@ create table if not exists santa.user
 	room_id varchar,
 	name varchar default null,
 	likes varchar[] default null,
-	dislikes varchar[] default null
+	dislikes varchar[] default null,
+	created_date	date	default now()::date
 ); 
 """

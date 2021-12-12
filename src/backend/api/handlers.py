@@ -30,6 +30,17 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to get user info')
         return success_response(info)
 
+    @app.get("/user/{user_id}/enter/{room_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
+    def get_user_info(user_id: str, room_id: str, response: Response):
+        """
+        Стать участником команты по id
+        """
+        ok = db.update_user_room_id(user_id, room_id)
+        if ok is False:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('failed to set user room')
+        return success_response('OK')
+
     @app.get("/user/{user_id}/recipient", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[UserModel])
     def get_user_recipient(user_id: str, response: Response):
         """
@@ -75,10 +86,36 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to get room info')
         return success_response(name)
 
+    @app.get("/room/{room_id}/isadmin/{user_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[bool])
+    def check_room_admin(room_id: str, user_id: str, response: Response):
+        """
+        Узнать, админ ли пользователь у данной комнаты
+        """
+        isadm, ok = db.check_if_room_admin(room_id, user_id)
+        if ok is False:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('failed to check room admin')
+        return success_response(isadm)
+
+    @app.get("/admin/{admin_id}/delete/{user_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
+    def check_room_admin(admin_id: str, user_id: str, response: Response):
+        """
+        Удалить пользователя из комнаты. admin_id - id админа этой команты, чтобы только он мог удалить кого-то.
+        """
+        rid, ok = db.get_room_id_by_admin_id(admin_id)
+        if not ok:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('failed to get room id')
+        ok = db.delete_user_from_room(user_id, rid)
+        if not ok:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('failed to check room admin')
+        return success_response('OK')
+
     @app.get("/room/{room_id}/lock", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
     def lock_name(room_id: str, response: Response):
         """
-        Залочить комнату
+        Сформировать пары в игре
         """
         ids, ok = db.get_user_ids_in_room(room_id=room_id)
         if ok is False:
@@ -91,19 +128,14 @@ def apply_handlers(app: FastAPI, db: DbManager):
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response('can not lock room with one member')
 
-        san = ids.pop(random.randrange(len(ids)))
+        san = ids.pop(random.randrange(0, len(ids)))
         fsan = san
 
-        while True:
-            res = ids.pop(random.randrange(len(ids)))
+        while len(ids) > 0:
+            res = ids.pop(random.randrange(0, len(ids)))
             pairs[san] = res
-
-            if len(ids) > 0:
-                res = san
-                san = ids.pop(random.randrange(len(ids)))
-            else:
-                pairs[res] = fsan
-                break
+            san = res
+        pairs[san] = fsan
 
         ok = db.lock_room(room_id, pairs)
         if ok is False:
@@ -128,22 +160,21 @@ def apply_handlers(app: FastAPI, db: DbManager):
 
         return success_response(rid)
 
-    @app.get("/room/{room_id}/users", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[List[str]])
-    def get_room_users(room_id: str, response: Response):
+    @app.get("/room/{room_id}/users", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[List[UserIdAndNameModel]])
+    def get_room_users(room_id: str, response: Response, my_id: str = ''):
         """
-        Получение имен участников данной команты (для админа команты) 
+        Получение имен и id участников данной команты (для не админа команты вернуться только имена). Передавать id запрашивающего пользователя в GET параметре my_id.
         """
-        ids, ok = db.get_user_ids_in_room(room_id=room_id)
+        users, ok = db.get_users_in_room(room_id=room_id)
         if ok is False:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response('failed to get room users')
 
-        names = []
-        for id in ids:
-            info, ok = db.get_user_info(id)
-            names.append(info['name'])
-            if ok is False:
-                response.status_code = status.HTTP_400_BAD_REQUEST
-                return error_response('failed to get user name')
+        logging.info("USERS: {}".format(users))
 
-        return success_response(names)
+        isadm, ok = db.check_if_room_admin(room_id, my_id)
+        if not isadm or not ok:
+            for us in users:
+                us['id'] = ''
+
+        return success_response(users)

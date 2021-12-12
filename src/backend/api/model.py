@@ -15,6 +15,10 @@ class UserModel(BaseModel):
     likes: List[str] = []
     dislikes: List[str] = []
 
+class UserIdAndNameModel(BaseModel):
+    name: str
+    id: str = ''
+
 class RoomModel(BaseModel):
     name: str
     admin_id: str

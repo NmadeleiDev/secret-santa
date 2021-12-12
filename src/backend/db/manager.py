@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2 import extras
 from psycopg2.extras import DictCursor
 from db.table_queries import *
-import hashlib, base64
+import json
 
 
 class DbManager():
@@ -17,14 +17,10 @@ class DbManager():
         self.user = os.getenv('POSTGRES_USER')
         self.password = os.getenv('POSTGRES_PASSWORD')
 
-        try:
-            logging.info("Establishing db connection... {}".format(
-                (self.db_name, self.user, self.password, self.host, self.port)))
-            self.conn = psycopg2.connect(
-                database=self.db_name, user=self.user, password=self.password, host=self.host, port=self.port)
-        except Exception as e:
-            logging.error("Failed to connect to db: {}".format(e))
-            exit(1)
+        logging.info("Establishing db connection... {}".format(
+            (self.db_name, self.user, self.password, self.host, self.port)))
+        self.conn = psycopg2.connect(
+            database=self.db_name, user=self.user, password=self.password, host=self.host, port=self.port)
 
         self.conn.autocommit = True
         logging.info("Connected to db")
@@ -118,6 +114,18 @@ class DbManager():
             logging.error("Failed to update user room: {}".format(e))
             return False
 
+    @dict_cursor_wrapper
+    def get_users_in_room(self, room_id: str, cursor=None) -> Tuple[List[dict], bool]:
+        query = """SELECT name, id FROM santa.user WHERE room_id=%s"""
+
+        try:
+            cursor.execute(query, (room_id, ))
+            res = cursor.fetchall()
+            return [dict(x) for x in res], True
+        except Exception as e:
+            logging.error("Failed to get room users: {}".format(e))
+            return [], False
+
     @cursor_wrapper
     def get_user_ids_in_room(self, room_id: str, cursor=None) -> Tuple[List[str], bool]:
         query = """SELECT id FROM santa.user WHERE room_id=%s"""
@@ -125,7 +133,18 @@ class DbManager():
         try:
             cursor.execute(query, (room_id, ))
             res = cursor.fetchall()
-            return res, True
+            return [x[0] for x in res], True
+        except Exception as e:
+            logging.error("Failed to get room user ids: {}".format(e))
+            return [], False
+
+    @cursor_wrapper
+    def delete_user_from_room(self, user_id: str, room_id: str, cursor=None) -> bool:
+        query = """UPDATE santa.user SET room_id = '' WHERE id=%s AND room_id=%s"""
+
+        try:
+            cursor.execute(query, (user_id, room_id, ))
+            return True
         except Exception as e:
             logging.error("Failed to update room: {}".format(e))
             return [], False
@@ -157,11 +176,35 @@ class DbManager():
             return '', False
 
     @cursor_wrapper
+    def check_if_room_admin(self, room_id: str, user_id: str, cursor=None) -> Tuple[bool, bool]:
+        query = """SELECT admin_user_id::varchar=%s FROM santa.room WHERE id=%s"""
+
+        try:
+            cursor.execute(query, (user_id, room_id))
+            res = cursor.fetchall()[0][0]
+            return res, True
+        except Exception as e:
+            logging.error("Failed to check room admin: {}".format(e))
+            return False, False
+
+    @cursor_wrapper
+    def get_room_id_by_admin_id(self, user_id: str, cursor=None) -> Tuple[str, bool]:
+        query = """SELECT id FROM santa.room WHERE admin_user_id=%s"""
+
+        try:
+            cursor.execute(query, (user_id,))
+            res = cursor.fetchall()[0][0]
+            return res, True
+        except Exception as e:
+            logging.error("Failed to get room id by admin: {}".format(e))
+            return False, False
+
+    @cursor_wrapper
     def lock_room(self, id: str, pairs: dict, cursor=None) -> bool:
         query = """UPDATE santa.room SET pairs=%s WHERE id=%s"""
 
         try:
-            cursor.execute(query, (pairs, id))
+            cursor.execute(query, (json.dumps(pairs), id))
             return True
         except Exception as e:
             logging.error("Failed to lock room: {}".format(e))
@@ -169,7 +212,7 @@ class DbManager():
 
     @cursor_wrapper
     def get_user_recipient(self, room_id: str, user_id: str, cursor=None) -> Tuple[str, bool]:
-        query = """SELECT pairs::json->'%s' FROM santa.room WHERE room_id=%s"""
+        query = """SELECT pairs::json->%s FROM santa.room WHERE id=%s"""
 
         try:
             cursor.execute(query, (user_id, room_id))
