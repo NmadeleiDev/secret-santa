@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import * as Yup from 'yup';
 import { TextInput } from './Input';
 import Button from './Button';
-import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
+import { IApiResponse, makeGetRequest } from 'axiosConfig';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import { setUser } from 'store/feaures/user';
-import React, { useState } from 'react';
+import React from 'react';
 import { IUser } from 'types/UserType';
 import { mainPageData } from 'data/strings';
 import { errorSelector, setError } from 'store/feaures/error';
 import { setRoom } from 'store/feaures/room';
+import { UUID_REGEX } from 'utils';
 
 export interface Values {
   id: string;
@@ -33,24 +33,25 @@ export const EnterRoomForm = () => {
   const dispatch = useAppDispatch();
   const { error } = useAppSelector(errorSelector);
   const validationSchema = Yup.object({
-    id: Yup.string().required('Введите код комнаты'),
+    id: Yup.string()
+      .matches(UUID_REGEX, mainPageData.wrongFormat)
+      .required('Введите код комнаты'),
   });
   const initialValues: Values = { id: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
-    console.log({ values });
-
-    const roomName = await makeGetRequest<IApiResponse<IUser>>(
+    const roomName = await makeGetRequest<IApiResponse<string>>(
       `/room/${values.id}/name`,
     );
     setSubmitting(false);
     if (roomName?.data) {
-      dispatch(setRoom({ id: values.id }));
+      dispatch(setRoom({ id: values.id, name: roomName.data }));
       router.push('/register');
     } else {
       dispatch(setError(mainPageData.roomNotFound));
+      setTimeout(() => dispatch(setError('')), 3000);
     }
   };
   const handleBack = (e: React.FormEvent) => {

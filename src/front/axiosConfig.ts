@@ -1,8 +1,13 @@
 import axios from 'axios';
 export const CancelToken = axios.CancelToken;
+const port =
+  process.env.NEXT_PUBLIC_NGINX_PORT === '80' ||
+  process.env.NEXT_PUBLIC_NGINX_PORT === ''
+    ? ''
+    : `:${process.env.NEXT_PUBLIC_NGINX_PORT}`;
 const host =
   process.env.NODE_ENV === 'production'
-    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}:${process.env.NEXT_PUBLIC_NGINX_PORT}`
+    ? `${process.env.NEXT_PUBLIC_NGINX_HOST}${port}`
     : 'localhost:2222';
 const protocol =
   process.env.NODE_ENV === 'production'

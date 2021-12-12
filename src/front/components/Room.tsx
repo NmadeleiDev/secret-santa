@@ -50,14 +50,19 @@ const Room = () => {
       const room = await makeGetRequest<IApiResponse<string>>(
         `/room/${id}/name`,
       );
-      const users = await makeGetRequest<IApiResponse<string[]>>(
-        `/room/${id}/users`,
+      const users = await makeGetRequest<
+        IApiResponse<{ name: string; id: string }[]>
+      >(`/room/${id}/users`);
+      const isAdmin = await makeGetRequest<IApiResponse<boolean>>(
+        `/room/${id}/isadmin/${user.id}`,
       );
+      console.log({ room, users, isAdmin });
+
       if (room?.data && users?.data) {
         dispatch(setRoom({ name: room.data, users: users.data }));
       } else {
         dispatch(setError(mainPageData.genericError));
-        setTimeout(() => dispatch(setError('')));
+        setTimeout(() => dispatch(setError('')), 3000);
       }
     };
 
@@ -78,6 +83,7 @@ const Room = () => {
       dispatch(setSuccess('Ура! Пары назначены!'));
     } else {
       dispatch(setError(mainPageData.genericError));
+      setTimeout(() => dispatch(setError('')), 3000);
     }
   };
 
@@ -102,7 +108,8 @@ const Room = () => {
         )}
       </span>
       <div className="users">
-        {room?.users && room.users.map((el, i) => <User name={el} key={i} />)}
+        {room?.users &&
+          room.users.map((el, i) => <User name={el.name} key={i} />)}
       </div>
       <div className="buttons">
         {room?.admin_id === user.id && (

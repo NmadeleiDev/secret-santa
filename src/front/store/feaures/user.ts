@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store/store';
 import { IUser } from 'types/UserType';
+import { boolean } from 'yup/lib/locale';
 
 export interface IUserSlice extends IUser {
   id: string;
+  isAdmin?: boolean;
 }
 
 const initialState: IUserSlice = {
@@ -12,6 +14,7 @@ const initialState: IUserSlice = {
   name: '',
   likes: [],
   dislikes: [],
+  isAdmin: false,
 };
 
 const userSlice = createSlice({
@@ -21,8 +24,11 @@ const userSlice = createSlice({
     setUser(state, { payload }: PayloadAction<IUserSlice>) {
       return { ...state, ...payload };
     },
-    bindRoom(state, { payload }: PayloadAction<string>) {
+    setRoomID(state, { payload }: PayloadAction<string>) {
       state.room_id = payload;
+    },
+    setIsAdmin(state, { payload }: PayloadAction<boolean>) {
+      state.isAdmin = payload;
     },
     resetUser() {
       return initialState;
@@ -33,4 +39,4 @@ const userSlice = createSlice({
 export const userSelector = (state: RootState) => state.user;
 
 export default userSlice.reducer;
-export const { setUser, bindRoom, resetUser } = userSlice.actions;
+export const { setUser, setRoomID, setIsAdmin, resetUser } = userSlice.actions;

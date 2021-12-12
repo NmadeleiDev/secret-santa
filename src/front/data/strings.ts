@@ -3,15 +3,14 @@ import MetaType from 'types/MetaType';
 export const mainPageData = {
   title: 'Тайный санта',
   description: 'Поделись новогодним настроением с друзьями',
-  mainButton: 'Войти в комнату',
   registerHeader: 'Регистрация',
-  registerButton: 'Создать комнату',
+  createRoom: 'Создать комнату',
   successRegHeader: 'Поздравляем, ты в игре!',
   enterRoom: 'Войти в комнату',
   fabToolpip: 'Кто такой "Тайный санта"?',
   regForm: 'Кто ты?',
   regFormText:
-    'Остался последний шаг. Представься и мы добавим тебя в комнату.',
+    'Остался последний шаг.\nПредставься и мы добавим тебя в комнату ',
   create: 'Создать',
   back: 'Назад',
   yourCode: 'Твой персональный код. Оставь его при себе.',
@@ -28,6 +27,8 @@ export const mainPageData = {
   genericError: 'Упс... Что-то пошло не так',
   userNotFound: 'Пользователь не найден',
   roomNotFound: 'Комната не найдена. Проверьте код комнаты',
+  roomNotFoundGoHome: 'Комната не найдена, попробуйте зайти с главной страницы',
+  wrongFormat: 'Неверный формат кода',
 };
 
 export const mockMeta: MetaType = {

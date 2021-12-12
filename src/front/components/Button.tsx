@@ -37,7 +37,7 @@ interface CopyButtonProps {
   text: string;
 }
 
-const StyledDiv = styled.div`
+const StyledSpan = styled.span`
   .icon {
     height: 30px;
     width: 30px;
@@ -63,7 +63,7 @@ export const CopyButton = ({ text }: CopyButtonProps) => {
     setTimeout(() => setCopied(false), 1000);
   };
   return (
-    <StyledDiv>
+    <StyledSpan>
       <CopyToClipboard text={text} onCopy={handleCopy}>
         {copied ? (
           <BiCheck className="icon success" />
@@ -71,6 +71,6 @@ export const CopyButton = ({ text }: CopyButtonProps) => {
           <BiCopy className="icon" />
         )}
       </CopyToClipboard>
-    </StyledDiv>
+    </StyledSpan>
   );
 };

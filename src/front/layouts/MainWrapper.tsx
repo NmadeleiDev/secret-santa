@@ -44,15 +44,15 @@ const StyledDiv = styled.div`
 `;
 
 export const MainWrapper: React.FC = ({ children }) => {
-  const { id } = useAppSelector(userSelector);
-  const { getItem, login } = useLocalStorage();
-  useEffect(() => {
-    if (id) return;
-    const userId = getItem('id');
-    console.log({ userId });
-    userId && login(userId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // const { id } = useAppSelector(userSelector);
+  // const { getItem, login } = useLocalStorage();
+  // useEffect(() => {
+  //   if (id) return;
+  //   const userId = getItem('id');
+  //   console.log({ userId });
+  //   userId && login(userId);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <StyledDiv className=".mainWrapper">

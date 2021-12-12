@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
+import { IApiResponse, makeGetRequest } from 'axiosConfig';
 import { useAppDispatch } from 'store/store';
-import user, { setUser } from 'store/feaures/user';
-import { IUser } from 'types/UserType';
 import { setRoom } from 'store/feaures/room';
+import { setError } from 'store/feaures/error';
+import { mainPageData } from 'data/strings';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
@@ -31,10 +31,12 @@ const Invite = ({
     const login = async () => {
       if (!room) {
         // TODO: show error message
+        dispatch(setError(mainPageData.roomNotFound));
+        setTimeout(() => dispatch(setError('')), 3000);
         return router.replace('/');
       }
       dispatch(setRoom(room));
-      router.replace('/room');
+      router.replace(`/register`);
     };
     login();
   }, [dispatch, router, room]);

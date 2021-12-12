@@ -63,10 +63,11 @@ export const CreateRoomForm = () => {
 
     if (userId.error || !userId.data) {
       dispatch(setError(mainPageData.genericError));
+      setTimeout(() => dispatch(setError('')), 3000);
       return;
     }
     const room: IRoom = {
-      name: values.username,
+      name: values.roomname,
       admin_id: userId.data,
     };
     const roomId = await makePostRequest<IApiResponse<string>>('/room', room);
@@ -75,7 +76,7 @@ export const CreateRoomForm = () => {
 
     if (roomId?.data) {
       putItem('roomId', roomId.data);
-      dispatch(setUser({ ...user, id: userId.data }));
+      dispatch(setUser({ ...user, id: userId.data, room_id: roomId.data }));
       dispatch(setRoom({ ...room, id: roomId.data }));
       router.push('/yourCode');
     }

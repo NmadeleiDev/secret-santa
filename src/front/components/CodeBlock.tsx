@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { CopyButton } from './Button';
 import styled from 'styled-components';
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.span`
   display: flex;
   justify-content: space-between;
   align-items: center;
