@@ -125,12 +125,17 @@ def apply_handlers(app: FastAPI, db: DbManager):
             return error_response('failed to check room admin')
         return success_response('OK')
 
-    @app.get("/room/{room_id}/lock", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def lock_room(room_id: str, response: Response):
+    @app.get("/room/{admin_id}/lock", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
+    def lock_room(admin_id: str, response: Response):
         """
-        Сформировать пары в игре
+        Сформировать пары в игре (доступно только админу комнаты)
         """
-        ids, ok = db.get_user_ids_in_room(room_id=room_id)
+        rid, ok = db.get_room_id_by_admin_id(admin_id)
+        if ok is False:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('you are not admin')
+
+        ids, ok = db.get_user_ids_in_room(room_id=rid)
         if ok is False:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response('failed to get room users')
