@@ -32,7 +32,7 @@ interface Props {
 
 const CodeBlock: FC<Props> = ({ className, main, text, children }) => {
   return (
-    <StyledDiv main={main}>
+    <StyledDiv className={className} main={main}>
       {children || text}
       <CopyButton main={main} text={text || ''} />
     </StyledDiv>
