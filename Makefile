@@ -17,6 +17,7 @@ build: ## build all containers (docker compose)
 	docker-compose build
 
 up: ## build & start the project (docker-compose)
+	cp .env ./src/front/.env
 	docker-compose up --build -d
 
 up-it: ## build & start the project (docker-compose)

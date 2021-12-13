@@ -31,7 +31,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         return success_response(info)
 
     @app.get("/user/{user_id}/enter/{room_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def get_user_info(user_id: str, room_id: str, response: Response):
+    def set_user_room(user_id: str, room_id: str, response: Response):
         """
         Стать участником команты по id (полезно, если тебя по ошибке удалили)
         """
@@ -111,7 +111,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         return success_response(isadm)
 
     @app.get("/admin/{admin_id}/delete/{user_id}", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def check_room_admin(admin_id: str, user_id: str, response: Response):
+    def delete_room_member(admin_id: str, user_id: str, response: Response):
         """
         Удалить пользователя из комнаты. admin_id - id админа этой команты, чтобы только он мог удалить кого-то.
         """
@@ -126,7 +126,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         return success_response('OK')
 
     @app.get("/room/{room_id}/lock", status_code=status.HTTP_200_OK, response_model=DefaultResponseModel[str])
-    def lock_name(room_id: str, response: Response):
+    def lock_room(room_id: str, response: Response):
         """
         Сформировать пары в игре
         """
