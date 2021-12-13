@@ -1,24 +1,18 @@
-import { IApiResponse, makeGetRequest } from 'axiosConfig';
+import { IApiResponse, makeGetRequest, ssrGetRequest } from 'axiosConfig';
 import Button from 'components/Button';
 import CodeBlock from 'components/CodeBlock';
-import Room from 'components/Room';
 import User from 'components/User';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { setError, setSuccess } from 'store/feaures/error';
-import { IRoomSlice, roomSelector } from 'store/feaures/room';
-import { IUserSlice, userSelector } from 'store/feaures/user';
+import React, { useEffect } from 'react';
+import { errorSelector, setError, setSuccess } from 'store/feaures/error';
+import { IRoomSlice, roomSelector, setRoom } from 'store/feaures/room';
+import { IUserSlice, setUser, userSelector } from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
-import { IRoom } from 'types/RoomType';
 import { IUser } from 'types/UserType';
 import { getRoomLink } from 'utils';
 
@@ -44,10 +38,16 @@ const StyledDiv = styled.div`
   .buttons {
     display: flex;
   }
+  .success {
+    color: ${({ theme }) => theme.colors.primary.main};
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
 `;
 
-interface Props {
-  room: IRoom | null;
+interface IBasicUser {
+  name: string;
+  id: string;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -55,13 +55,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   let room: IRoomSlice | null = null;
   let user: IUserSlice | null = null;
   if (roomid) {
-    const roomData = await makeGetRequest<IApiResponse<string>>(
+    const roomData = await ssrGetRequest<IApiResponse<string>>(
       `room/${roomid}/name`,
     );
     if (roomData?.data) {
-      const users = await makeGetRequest<
-        IApiResponse<{ name: string; id: string }[]>
-      >(`room/${roomid}/users`);
+      const users = await ssrGetRequest<IApiResponse<IBasicUser[]>>(
+        `room/${roomid}/users`,
+      );
       console.log({ users: users.data });
 
       room = {
@@ -73,13 +73,12 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     }
   }
   if (userid) {
-    const userData = await makeGetRequest<IApiResponse<IUser>>(
+    const userData = await ssrGetRequest<IApiResponse<IUser>>(
       `user/${userid}/info`,
     );
-    const isAdminData = await makeGetRequest<IApiResponse<boolean>>(
+    const isAdminData = await ssrGetRequest<IApiResponse<boolean>>(
       `room/${roomid}/isadmin/${userid}`,
     );
-    // console.log({ userData, isAdminData });
 
     if (
       userData.data?.name &&
@@ -103,21 +102,27 @@ const RoomPage = ({
   user: userData,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-  // const user = useAppSelector(userSelector);
-  // const room = useAppSelector(roomSelector);
-  const reduxUser = useAppSelector(userSelector);
+  const user = useAppSelector(userSelector);
+  const room = useAppSelector(roomSelector);
+  const { success, error } = useAppSelector(errorSelector);
   const dispatch = useAppDispatch();
 
-  const room = roomData ? (roomData as IRoomSlice) : null;
-  const user = reduxUser ? reduxUser : (userData as IUserSlice | null);
+  useEffect(() => {
+    if (roomData?.id) dispatch(setRoom(roomData));
+    if (userData?.id) dispatch(setUser(userData));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const lockRoom = async () => {
+    console.log('lockRoom');
+
     const lock = await makeGetRequest<IApiResponse<string>>(
       `/room/${user?.room_id}/lock`,
     );
     console.log({ lock });
     if (lock?.data) {
-      dispatch(setSuccess('Ура! Пары назначены!'));
+      dispatch(setSuccess(mainPageData.lockSuccess));
+      setTimeout(() => dispatch(setSuccess('')), 3000);
     } else {
       dispatch(setError(mainPageData.genericError));
       setTimeout(() => dispatch(setError('')), 3000);
@@ -129,7 +134,7 @@ const RoomPage = ({
     router.back();
   };
 
-  if (!room) {
+  if (!room.id) {
     return (
       <>
         <Head>
@@ -158,26 +163,31 @@ const RoomPage = ({
           <span className="info">
             {mainPageData.usersQuantity} {room.users?.length}
             {user?.isAdmin && user?.room_id && (
-              <div className="invie">
-                Ссылка для приглашения в комнату:
+              <div className="invite">
+                {mainPageData.invitation}
                 <CodeBlock text={getRoomLink(user.room_id)} />
               </div>
             )}
           </span>
           <div className="users">
             {room?.users?.map((el, i) => (
-              <User name={el.name} key={i} />
+              <User
+                name={el.name}
+                key={i}
+                enableDelete={user.isAdmin || false}
+              />
             ))}
           </div>
+          <div className="success">{success}</div>
           <div className="buttons">
-            {user?.isAdmin && (
-              <Button onClick={lockRoom} variant="primary">
-                {mainPageData.back}
-              </Button>
-            )}
             <Button onClick={handleBack} variant="text">
               {mainPageData.back}
             </Button>
+            {user?.isAdmin && (
+              <Button onClick={lockRoom} variant="primary">
+                {mainPageData.lockRoom}
+              </Button>
+            )}
           </div>
         </StyledDiv>
       </MainWrapper>
