@@ -42,6 +42,34 @@ const StyledDiv = styled.div`
   }
   .buttons {
     display: flex;
+
+    .primary-button {
+      position: relative;
+
+      .tooltip {
+        display: none;
+        position: absolute;
+        right: calc(50% - 5rem);
+        bottom: -90px;
+        max-width: 10rem;
+        height: auto;
+        font-size: 0.8rem;
+        font-weight: 400;
+        padding: 0.4rem 1rem;
+        border-radius: 30px;
+        border: none;
+        color: ${({ theme }) => theme.colors.text.dark};
+        background-color: ${({ theme }) => theme.colors.base.darkerBG};
+        box-shadow: 0 0 10px ${({ theme }) => theme.colors.base.shadow};
+        z-index: 4;
+      }
+
+      &:hover {
+        .tooltip {
+          display: block;
+        }
+      }
+    }
   }
   .success {
     color: ${({ theme }) => theme.colors.primary.main};
@@ -77,6 +105,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       `user/${userid}/info`,
     );
     const isAdminData = await ssrGetRequest<IApiResponse<boolean>>(
+      `room/${roomid}/isadmin/${userid}`,
+    );
+    const recipient = await ssrGetRequest<IApiResponse<boolean>>(
       `room/${roomid}/isadmin/${userid}`,
     );
 
@@ -117,7 +148,7 @@ const RoomPage = ({
     console.log('lockRoom');
 
     const lock = await makeGetRequest<IApiResponse<string>>(
-      `/room/${user?.room_id}/lock`,
+      `/room/${user?.id}/lock`,
     );
     console.log({ lock });
     if (lock?.data) {
@@ -162,7 +193,7 @@ const RoomPage = ({
           </h2>
           <span className="info">
             {mainPageData.usersQuantity} {room.users?.length}
-            {user?.isAdmin && user?.room_id && (
+            {user?.room_id && (
               <div className="invite">
                 {mainPageData.invitation}
                 <CodeBlock text={getRoomLink(user.room_id)} />
@@ -185,8 +216,14 @@ const RoomPage = ({
               {mainPageData.back}
             </Button>
             {user?.isAdmin && (
-              <Button onClick={lockRoom} variant="primary">
+              <Button
+                className="primary-button"
+                disabled={!room.users || room.users.length < 3}
+                onClick={lockRoom}
+                variant="primary"
+              >
                 {mainPageData.lockRoom}
+                <span className="tooltip">{mainPageData.lockRoomTooltip}</span>
               </Button>
             )}
           </div>

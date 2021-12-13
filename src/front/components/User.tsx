@@ -38,28 +38,34 @@ const StyledDiv = styled.div`
       box-shadow: none;
       transform: scale(110%);
     }
-  }
-  .cross {
-    font-size: 2rem;
-    color: ${({ theme }) => theme.colors.primary.main};
-  }
 
-  .tooltip {
-    font-size: 0.8rem;
-    font-weight: 400;
-    display: none;
-    position: absolute;
-    padding: 0.3rem;
-    border-radius: 5px;
-    background-color: ${({ theme }) => theme.colors.base.BG};
-    z-index: 2;
-    bottom: 0.6rem;
-    right: -150px;
-  }
+    .cross {
+      font-size: 2rem;
+      color: ${({ theme }) => theme.colors.primary.main};
+    }
 
-  &:hover {
     .tooltip {
-      display: block;
+      font-size: 0.8rem;
+      font-weight: 400;
+      display: none;
+      position: absolute;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      border: none;
+      color: ${({ theme }) => theme.colors.text.dark};
+      background-color: ${({ theme }) => theme.colors.base.darkerBG};
+      box-shadow: 0 0 10px ${({ theme }) => theme.colors.base.shadow};
+      z-index: 4;
+      bottom: 0.2rem;
+      left: 30px;
+    }
+
+    &:hover {
+      .tooltip {
+        display: block;
+      }
     }
   }
   @media (max-width: var(--tablet-width)) {

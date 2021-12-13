@@ -69,7 +69,7 @@ export const EnterRoomForm = () => {
         <TextInput name="id" type="text" placeholder="Код комнаты" />
         <div className="buttons">
           <Button variant="primary">{mainPageData.enter}</Button>
-          <Button onClick={handleBack} variant="text">
+          <Button type="submit" onClick={handleBack} variant="text">
             {mainPageData.back}
           </Button>
         </div>
