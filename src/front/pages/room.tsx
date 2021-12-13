@@ -194,6 +194,10 @@ const RoomPage = ({
                 <CodeBlock text={getRoomLink(user.room_id)} />
               </div>
             )}
+            <div className="code">
+              {mainPageData.yourCode}
+              <CodeBlock text={user.id} />
+            </div>
           </span>
           <Pair userid={user.id} users={room.users} />
           <div className="users">
