@@ -102,11 +102,11 @@ export const CreateRoomForm = () => {
         <TextInput name="roomname" type="text" placeholder="Название комнаты" />
         {error && <div className="error">{error}</div>}
         <div className="buttons">
-          <Button type="submit" variant="primary">
-            {mainPageData.create}
-          </Button>
           <Button onClick={handleBack} variant="text">
             {mainPageData.back}
+          </Button>
+          <Button type="submit" variant="primary">
+            {mainPageData.create}
           </Button>
         </div>
       </StyledForm>

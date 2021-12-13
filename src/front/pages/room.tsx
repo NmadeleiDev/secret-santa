@@ -1,6 +1,7 @@
 import { IApiResponse, makeGetRequest, ssrGetRequest } from 'axiosConfig';
 import Button from 'components/Button';
 import CodeBlock from 'components/CodeBlock';
+import Pair from 'components/Pair';
 import User from 'components/User';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
@@ -108,8 +109,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       `room/${roomid}/isadmin/${userid}`,
     );
     const recipient = await ssrGetRequest<IApiResponse<boolean>>(
-      `room/${roomid}/isadmin/${userid}`,
+      `user/${userid}/recipient`,
     );
+
+    console.log({ recipient });
 
     if (
       userData.data?.name &&
@@ -200,6 +203,7 @@ const RoomPage = ({
               </div>
             )}
           </span>
+          <Pair userid={user.id} users={room.users} />
           <div className="users">
             {room?.users?.map((el, i) => (
               <User
@@ -223,7 +227,11 @@ const RoomPage = ({
                 variant="primary"
               >
                 {mainPageData.lockRoom}
-                <span className="tooltip">{mainPageData.lockRoomTooltip}</span>
+                {room.users && room.users.length < 3 && (
+                  <span className="tooltip">
+                    {mainPageData.lockRoomTooltip}
+                  </span>
+                )}
               </Button>
             )}
           </div>
