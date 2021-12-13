@@ -22,14 +22,21 @@ import { errorSelector, setError } from 'store/feaures/error';
 
 export interface Values {
   name: string;
+  uuid: string;
 }
 
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .p {
+
+  .h3 {
+    font-size: 1.2rem;
     margin-top: 2rem;
+  }
+
+  .p {
+    margin-top: 1rem;
     font-size: 1rem;
   }
 
@@ -55,6 +62,7 @@ export const RegistrationForm = () => {
       //   setTimeout(() => dispatch(setError('')), 3000);
       router.replace('/');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!room.id) {
@@ -63,10 +71,10 @@ export const RegistrationForm = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов')
-      .required('Введите имя'),
+      .max(50, 'Максимум 50 символов'),
+    uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
   });
-  const initialValues: Values = { name: '' };
+  const initialValues: Values = { name: '', uuid: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
@@ -74,22 +82,46 @@ export const RegistrationForm = () => {
     if (!room.id) {
       return;
     }
+    console.log({ values });
 
-    const user = {
-      room_id: room.id,
-      name: values.name,
-      likes: [],
-      dislikes: [],
-    };
-    const userId = await makePostRequest<IApiResponse<string>>('/user', user);
+    if (values.uuid) {
+      setSubmitting(false);
+      const isMember = await makeGetRequest<IApiResponse<boolean>>(
+        `/room/${room.id}/ismember/${values.uuid}`,
+      );
+      console.log({ isMember });
 
-    setSubmitting(false);
-    if (userId?.data) {
-      putItem('id', userId.data);
-      dispatch(setUser({ ...user, id: userId.data }));
-      router.push(`/room?userid=${userId.data}&roomid=${room.id}`);
+      if (isMember?.data) {
+        const user = await makeGetRequest<IApiResponse<IUser>>(
+          `/user/${values.uuid}/info`,
+        );
+        if (user.data) {
+          dispatch(setUser({ ...user.data, id: values.uuid }));
+          router.push(`/room?userid=${values.uuid}&roomid=${room.id}`);
+        }
+      } else {
+        dispatch(setError(mainPageData.userNotFound));
+        setTimeout(() => dispatch(setError('')), 3000);
+      }
+      return;
     } else {
-      setError(mainPageData.genericError);
+      const user = {
+        room_id: room.id,
+        name: values.name,
+        likes: [],
+        dislikes: [],
+      };
+      const userId = await makePostRequest<IApiResponse<string>>('/user', user);
+
+      setSubmitting(false);
+      if (userId?.data) {
+        //   putItem('id', userId.data);
+        dispatch(setUser({ ...user, id: userId.data }));
+        router.push(`/room?userid=${userId.data}&roomid=${room.id}`);
+      } else {
+        dispatch(setError(mainPageData.genericError));
+        setTimeout(() => dispatch(setError('')), 3000);
+      }
     }
   };
   const handleBack = (e: React.FormEvent) => {
@@ -104,15 +136,19 @@ export const RegistrationForm = () => {
     >
       <StyledForm>
         <h2>{mainPageData.regForm}</h2>
-        <p className="p">
+        <h3 className="h3">
           {mainPageData.regFormText}&quot;{room.name}&quot;
-        </p>
+        </h3>
         <TextInput name="name" type="text" placeholder="Имя пользователя" />
+        <p className="p">{mainPageData.ifHasUUID}</p>
+        <TextInput name="uuid" type="text" placeholder="Код пользователя" />
         {error && <div className="error">{error}</div>}
         <div className="buttons">
-          <Button variant="primary">{mainPageData.create}</Button>
           <Button onClick={handleBack} variant="text">
             {mainPageData.back}
+          </Button>
+          <Button type="submit" variant="primary">
+            {mainPageData.enter}
           </Button>
         </div>
       </StyledForm>
