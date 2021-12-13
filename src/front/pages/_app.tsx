@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import theme from 'styles/theme';
 import { Provider } from 'react-redux';
 import { store } from 'store/store';
+import Snowfall from 'react-snowfall';
 
 export const host =
   process.env.NODE_ENV === 'production'
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
+        <Snowfall color="white" />
       </ThemeProvider>
     </Provider>
   );
