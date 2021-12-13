@@ -26,12 +26,11 @@ const StyledDiv = styled.div`
     width: 100%;
 
     .main {
-      background-color: ${({ theme }) => theme.colors.secondary.dark};
-      color: ${({ theme }) => theme.colors.white};
-      a {
-        color: ${({ theme }) => theme.colors.white};
-        font-weight: 600;
-      }
+      padding: 1.5rem;
+    }
+
+    .personal {
+      margin-top: 2rem;
     }
   }
 `;
@@ -55,7 +54,6 @@ const YourCode: NextPage = () => {
     router.push('/room');
   };
 
-  const userlink = getUserLink(user.id);
   const roomlink = getRoomLink(room.id);
 
   return (
@@ -64,21 +62,15 @@ const YourCode: NextPage = () => {
         <h2 className="h2">{mainPageData.successRegHeader}</h2>
         <div className="links">
           {mainPageData.yourRoomLink}
-          <CodeBlock main text={roomlink}>
+          <CodeBlock className="main" main text={roomlink}>
             <Link href={roomlink}>
               <a>{roomlink}</a>
             </Link>
           </CodeBlock>
-          {mainPageData.yourCode}
-          <CodeBlock text={user.id} />
-          {mainPageData.yourLink}
-          <CodeBlock text={userlink}>
-            <Link href={userlink}>
-              <a>{userlink}</a>
-            </Link>
-          </CodeBlock>
-          {mainPageData.yourRoomCode}
-          <CodeBlock text={room.id} />
+          <div className="personal">
+            {mainPageData.yourCode}
+            <CodeBlock text={user.id} />
+          </div>
         </div>
         <Button variant="text" onClick={handleClick}>
           {mainPageData.enterRoom}
