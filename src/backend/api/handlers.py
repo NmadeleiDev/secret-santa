@@ -103,7 +103,7 @@ def apply_handlers(app: FastAPI, db: DbManager):
         """
         Проверка, участник ли пользователь данной комнаты
         """
-        isadm, ok = db.check_if_room_admin(room_id, user_id)
+        isadm, ok = db.check_if_room_member(room_id, user_id)
         if ok is False:
             # response.status_code = status.HTTP_400_BAD_REQUEST
             # return error_response('failed to check room admin')
