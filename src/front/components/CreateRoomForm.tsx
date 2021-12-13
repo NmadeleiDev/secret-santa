@@ -10,10 +10,8 @@ import React from 'react';
 import { mainPageData } from 'data/strings';
 import { useLocalStorage } from 'hooks/useLocalStorage';
 import { IRoom } from 'types/RoomType';
-import { setUser, userSelector } from 'store/feaures/user';
-import { roomSelector, setRoom } from 'store/feaures/room';
-import CodeBlock from './CodeBlock';
-import { host, protocol } from 'pages/_app';
+import { setUser } from 'store/feaures/user';
+import { setRoom } from 'store/feaures/room';
 import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 
 export interface Values {
@@ -76,7 +74,14 @@ export const CreateRoomForm = () => {
 
     if (roomId?.data) {
       putItem('roomId', roomId.data);
-      dispatch(setUser({ ...user, id: userId.data, room_id: roomId.data }));
+      dispatch(
+        setUser({
+          ...user,
+          id: userId.data,
+          room_id: roomId.data,
+          isAdmin: true,
+        }),
+      );
       dispatch(setRoom({ ...room, id: roomId.data }));
       router.push('/yourCode');
     }

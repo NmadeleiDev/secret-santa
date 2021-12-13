@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { api, IApiResponse, makeGetRequest } from 'axiosConfig';
+import { IApiResponse, ssrGetRequest } from 'axiosConfig';
 import { useAppDispatch } from 'store/store';
 import { setUser } from 'store/feaures/user';
 import { IUser } from 'types/UserType';
@@ -9,7 +9,7 @@ import { IUser } from 'types/UserType';
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
   if (!id) return { props: { user: null } };
-  const user = await makeGetRequest<IApiResponse<IUser>>(`user/${id}/info`);
+  const user = await ssrGetRequest<IApiResponse<IUser>>(`user/${id}/info`);
   if (user?.data) {
     return { props: { user: { ...user.data, id } } };
   }

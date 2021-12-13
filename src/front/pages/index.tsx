@@ -5,9 +5,6 @@ import Button from 'components/Button';
 import { mainPageData } from 'data/strings';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { useLocalStorage } from 'hooks/useLocalStorage';
-import { useRouter } from 'next/router';
 
 const StyledMain = styled.main`
   max-width: var(--desctop-width);

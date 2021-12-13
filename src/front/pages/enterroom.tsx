@@ -9,7 +9,7 @@ const CreateRoom: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{mainPageData.registerHeader}</title>
+        <title>{mainPageData.enterRoom}</title>
       </Head>
       <MainWrapper>
         <EnterRoomForm />

@@ -16,6 +16,7 @@ const StyledDiv = styled.div`
   padding: 24px;
   margin: 0 auto;
   overflow: hidden;
+  overflow-y: scroll;
   background-color: ${({ theme }) => theme.colors.base.darkerBG};
   position: relative;
 
@@ -57,7 +58,7 @@ export const MainWrapper: React.FC = ({ children }) => {
   return (
     <StyledDiv className=".mainWrapper">
       {children}
-      <Fab className="fab" data-tip="React-tooltip" data-for="fab">
+      {/* <Fab className="fab" data-tip="React-tooltip" data-for="fab">
         ?
       </Fab>
 
@@ -69,7 +70,7 @@ export const MainWrapper: React.FC = ({ children }) => {
         className="tooltipWrapper"
       >
         <div className="tooltipBlock">{mainPageData.fabToolpip}</div>
-      </ReactTooltip>
+      </ReactTooltip> */}
     </StyledDiv>
   );
 };

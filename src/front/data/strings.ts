@@ -5,12 +5,13 @@ export const mainPageData = {
   description: 'Поделись новогодним настроением с друзьями',
   registerHeader: 'Регистрация',
   createRoom: 'Создать комнату',
-  successRegHeader: 'Поздравляем, ты в игре!',
+  successRegHeader: 'Поздравляю, ты в игре!',
   enterRoom: 'Войти в комнату',
   fabToolpip: 'Кто такой "Тайный санта"?',
   regForm: 'Кто ты?',
+  ifHasUUID: 'Если ты уже участник этой комнаты - введи сюда свой код',
   regFormText:
-    'Остался последний шаг.\nПредставься и мы добавим тебя в комнату ',
+    'Остался последний шаг. Представься и мы добавим тебя в комнату ',
   create: 'Создать',
   back: 'Назад',
   yourCode: 'Твой персональный код. Оставь его при себе.',
@@ -23,12 +24,16 @@ export const mainPageData = {
   enter: 'Войти',
   room: 'Комната ',
   createRoomForm: 'Новая комната',
-  usersQuantity: 'Количество пользоателей в комнате: ',
+  usersQuantity: 'Количество пользователей в комнате: ',
   genericError: 'Упс... Что-то пошло не так',
   userNotFound: 'Пользователь не найден',
   roomNotFound: 'Комната не найдена. Проверьте код комнаты',
   roomNotFoundGoHome: 'Комната не найдена, попробуйте зайти с главной страницы',
   wrongFormat: 'Неверный формат кода',
+  lockRoom: 'Назначить пары',
+  removeUser: 'Удалить пользователя',
+  lockSuccess: 'Ура! Пары назначены!',
+  invitation: 'Ссылка для приглашения в комнату:',
 };
 
 export const mockMeta: MetaType = {
