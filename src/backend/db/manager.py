@@ -50,7 +50,7 @@ class DbManager():
 
     #CRUD user
     @cursor_wrapper
-    def insert_user(self, name: str, room_id: int, likes: List[str], dislikes: List[str], cursor=None) -> Tuple[str, bool]:
+    def insert_user(self, name: str, room_id: int, likes: str, dislikes: str, cursor=None) -> Tuple[str, bool]:
 
         query = """INSERT INTO santa.user (name, room_id, likes, dislikes) VALUES (%s,%s,%s,%s) RETURNING id"""
 
@@ -76,7 +76,7 @@ class DbManager():
             return {}, False
 
     @cursor_wrapper
-    def update_user_likes(self, user_id: str, likes: List[str], dislikes: List[str], cursor=None) -> bool:
+    def update_user_likes(self, user_id: str, likes: str, dislikes: str, cursor=None) -> bool:
         query = """UPDATE santa.user 
                 SET (likes, dislikes) = (%s,%s)
                 WHERE id=%s"""
