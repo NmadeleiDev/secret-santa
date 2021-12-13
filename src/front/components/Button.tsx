@@ -12,15 +12,22 @@ const Button = styled.button<ButtonProps>`
   margin: 1rem;
   border: none;
   font-size: 1.5rem;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   border-radius: ${({ theme }) => theme.shape.borderRadius}px;
-  border: ${({ theme, variant }) =>
-    variant === 'outline' ? `1px solid ${theme.colors.base.line}` : 'none'};
-  color: ${({ theme, variant = 'text' }) =>
-    variant === 'text' || variant === 'outline'
+  border: ${({ theme, variant, disabled }) =>
+    variant === 'outline' || disabled
+      ? `1px solid ${theme.colors.base.line}`
+      : 'none'};
+  color: ${({ theme, variant = 'text', disabled }) =>
+    disabled
+      ? theme.colors.text.gray
+      : variant === 'text' || variant === 'outline'
       ? theme.colors.black
       : theme.colors.white};
-  background-color: ${({ theme, variant = 'text' }) =>
-    variant === 'primary'
+  background-color: ${({ theme, variant = 'text', disabled }) =>
+    disabled
+      ? theme.colors.base.darkerBG
+      : variant === 'primary'
       ? theme.colors.primary.main
       : variant === 'secondary'
       ? theme.colors.secondary
