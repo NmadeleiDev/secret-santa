@@ -17,8 +17,8 @@ create table if not exists santa.user
 	id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
 	room_id varchar,
 	name varchar default null,
-	likes varchar[] default null,
-	dislikes varchar[] default null,
+	likes varchar default null,
+	dislikes varchar default null,
 	created_date	date	default now()::date
 ); 
 """

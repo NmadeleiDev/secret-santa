@@ -20,7 +20,6 @@ app = FastAPI(
         "name": "Gregory Potemkin",
         "email": "potemkin3940@gmail.com",
     },
-    # openapi_url="/openapi.json",
     docs_url="/docs",
     root_path="/api/v1",
     openapi_url="/api/v1/openapi.json"

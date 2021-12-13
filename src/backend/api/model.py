@@ -12,8 +12,8 @@ class DefaultResponseModel(GenericModel, Generic[DataT]):
 class UserModel(BaseModel):
     room_id: str = ''
     name: str
-    likes: List[str] = []
-    dislikes: List[str] = []
+    likes: str = ''
+    dislikes: str = ''
 
 class UserIdAndNameModel(BaseModel):
     name: str
