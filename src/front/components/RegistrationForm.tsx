@@ -35,6 +35,8 @@ const StyledForm = styled(Form)`
   .h3 {
     font-size: 1.2rem;
     margin-top: 2rem;
+    text-align: center;
+    width: 100%;
   }
 
   .h4 {
