@@ -136,7 +136,7 @@ export const RegistrationForm = () => {
         </div>
         <div className="login">
           {mainPageData.signinText}
-          <Link href="/signup">
+          <Link href="/signin">
             <a>{mainPageData.enter}</a>
           </Link>
         </div>
