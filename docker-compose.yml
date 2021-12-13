@@ -16,8 +16,8 @@ services:
 
       DEV_MODE: ${DEV_MODE}
     restart: always
-    ports:
-      - 2222:2222
+    # ports:
+    #   - 2222:2222
     depends_on:
       - db
     links:
@@ -28,7 +28,7 @@ services:
     restart: always
     hostname: db
     ports:
-      - 5432:5432
+      - ${DB_OUT_PORT}:5432
     # volumes:
     #   - ./postgres-data:/var/lib/postgresql/data:rw
     environment:
