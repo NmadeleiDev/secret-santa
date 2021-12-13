@@ -61,7 +61,36 @@ services:
         NEXT_PUBLIC_FRONTEND_PORT: $NEXT_PUBLIC_FRONTEND_PORT
         NEXT_PUBLIC_FRONTEND_HOST: $NEXT_PUBLIC_FRONTEND_HOST
         NEXT_PUBLIC_FRONTEND_PROTOCOL: $NEXT_PUBLIC_FRONTEND_PROTOCOL
+        NEXT_PUBLIC_BACKEND_PREFIX
+  server:
+    build:
+      context: ./src/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - /etc/localtime:/etc/localtime/:ro
+    ports:
+      - ${FRONT_PORT}:80
+    restart: always
+
+  front:
+    # ports:
+    #   - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
+    hostname: front
+    build:
+      context: ./src/front
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_NGINX_HOST: $NEXT_PUBLIC_NGINX_HOST
+        NEXT_PUBLIC_NGINX_PORT: $NEXT_PUBLIC_NGINX_PORT
+        NEXT_PUBLIC_FRONTEND_PORT: $NEXT_PUBLIC_FRONTEND_PORT
+        NEXT_PUBLIC_FRONTEND_HOST: $NEXT_PUBLIC_FRONTEND_HOST
+        NEXT_PUBLIC_FRONTEND_PROTOCOL: $NEXT_PUBLIC_FRONTEND_PROTOCOL
         NEXT_PUBLIC_BACKEND_PREFIX: $NEXT_PUBLIC_BACKEND_PREFIX
+    env_file:
+      - .env
+    links:
+      - backend
+: $NEXT_PUBLIC_BACKEND_PREFIX
     env_file:
       - .env
     links:
