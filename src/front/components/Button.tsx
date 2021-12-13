@@ -35,9 +35,10 @@ export default Button;
 
 interface CopyButtonProps {
   text: string;
+  main?: boolean;
 }
 
-const StyledSpan = styled.span`
+const StyledSpan = styled.span<{ main?: boolean }>`
   .icon {
     height: 30px;
     width: 30px;
@@ -47,8 +48,11 @@ const StyledSpan = styled.span`
     border: 1px solid transparent;
   }
   &:hover .icon {
-    color: ${({ theme }) => theme.colors.secondary.dark};
-    border: 1px solid ${({ theme }) => theme.colors.secondary.dark};
+    color: ${({ theme, main }) =>
+      main ? theme.colors.white : theme.colors.secondary.dark};
+    border: 1px solid
+      ${({ theme, main }) =>
+        main ? theme.colors.white : theme.colors.secondary.dark};
   }
 
   .success {
@@ -56,14 +60,14 @@ const StyledSpan = styled.span`
   }
 `;
 
-export const CopyButton = ({ text }: CopyButtonProps) => {
+export const CopyButton = ({ text, main }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 1000);
   };
   return (
-    <StyledSpan>
+    <StyledSpan main={main}>
       <CopyToClipboard text={text} onCopy={handleCopy}>
         {copied ? (
           <BiCheck className="icon success" />

@@ -53,8 +53,8 @@ const StyledDiv = styled.div`
     border-radius: 5px;
     background-color: ${({ theme }) => theme.colors.base.BG};
     z-index: 2;
-    bottom: 0;
-    right: -100px;
+    bottom: 0.6rem;
+    right: -150px;
   }
 
   &:hover {

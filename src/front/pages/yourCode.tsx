@@ -21,9 +21,18 @@ const StyledDiv = styled.div`
     text-align: center;
   }
 
-  .p {
+  .links {
     max-width: var(--desktop-width);
     width: 100%;
+
+    .main {
+      background-color: ${({ theme }) => theme.colors.secondary.dark};
+      color: ${({ theme }) => theme.colors.white};
+      a {
+        color: ${({ theme }) => theme.colors.white};
+        font-weight: 600;
+      }
+    }
   }
 `;
 
@@ -53,7 +62,13 @@ const YourCode: NextPage = () => {
     <MainWrapper>
       <StyledDiv>
         <h2 className="h2">{mainPageData.successRegHeader}</h2>
-        <p className="p">
+        <div className="links">
+          {mainPageData.yourRoomLink}
+          <CodeBlock main text={roomlink}>
+            <Link href={roomlink}>
+              <a>{roomlink}</a>
+            </Link>
+          </CodeBlock>
           {mainPageData.yourCode}
           <CodeBlock text={user.id} />
           {mainPageData.yourLink}
@@ -64,13 +79,7 @@ const YourCode: NextPage = () => {
           </CodeBlock>
           {mainPageData.yourRoomCode}
           <CodeBlock text={room.id} />
-          {mainPageData.yourRoomLink}
-          <CodeBlock text={roomlink}>
-            <Link href={roomlink}>
-              <a>{roomlink}</a>
-            </Link>
-          </CodeBlock>
-        </p>
+        </div>
         <Button variant="text" onClick={handleClick}>
           {mainPageData.enterRoom}
         </Button>
