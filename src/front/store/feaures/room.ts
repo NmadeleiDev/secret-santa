@@ -3,8 +3,13 @@ import { RootState } from 'store/store';
 import { IRoom } from 'types/RoomType';
 
 export interface IRoomSlice extends Partial<IRoom> {
-  users?: { name: string; id: string }[];
+  users?: IBasicUser[];
   id?: string;
+}
+
+export interface IBasicUser {
+  name: string;
+  id: string;
 }
 
 const initialState: IRoomSlice = {
@@ -23,6 +28,12 @@ const RoomSlice = createSlice({
     addUser(state, { payload }: PayloadAction<{ name: string; id: string }>) {
       state.users?.push(payload);
     },
+    removeUser(state, { payload }: PayloadAction<string>) {
+      if (payload === '') return;
+      const newUsers = state.users?.filter((user) => user.id !== payload);
+      console.log({ newUsers });
+      state.users = newUsers;
+    },
     resetRoom() {
       return initialState;
     },
@@ -31,4 +42,4 @@ const RoomSlice = createSlice({
 
 export const roomSelector = (state: RootState) => state.room;
 export default RoomSlice.reducer;
-export const { setRoom, resetRoom } = RoomSlice.actions;
+export const { setRoom, addUser, removeUser, resetRoom } = RoomSlice.actions;

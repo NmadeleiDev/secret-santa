@@ -9,7 +9,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { errorSelector, setError, setSuccess } from 'store/feaures/error';
-import { IRoomSlice, roomSelector, setRoom } from 'store/feaures/room';
+import {
+  IBasicUser,
+  IRoomSlice,
+  roomSelector,
+  setRoom,
+} from 'store/feaures/room';
 import { IUserSlice, setUser, userSelector } from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
@@ -44,11 +49,6 @@ const StyledDiv = styled.div`
     font-weight: 600;
   }
 `;
-
-interface IBasicUser {
-  name: string;
-  id: string;
-}
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { roomid, userid } = query;
@@ -173,6 +173,7 @@ const RoomPage = ({
             {room?.users?.map((el, i) => (
               <User
                 name={el.name}
+                id={el.id}
                 key={i}
                 enableDelete={user.isAdmin || false}
               />
