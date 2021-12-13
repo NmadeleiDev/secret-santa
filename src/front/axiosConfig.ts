@@ -8,7 +8,7 @@ const port =
 const host =
   process.env.NODE_ENV === 'production'
     ? `${process.env.NEXT_PUBLIC_NGINX_HOST}${port}`
-    : 'localhost:2222';
+    : `${process.env.NEXT_PUBLIC_NGINX_HOST}${port}`;
 const protocol =
   process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_FRONTEND_PROTOCOL
@@ -16,12 +16,12 @@ const protocol =
 const prefix =
   process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_BACKEND_PREFIX
-    : '';
+    : process.env.NEXT_PUBLIC_BACKEND_PREFIX;
 
 const ssrHost =
   process.env.NODE_ENV === 'production'
     ? `${process.env.NEXT_PUBLIC_BACKEND_HOST}:${process.env.NEXT_PUBLIC_BACKEND_PORT}`
-    : 'localhost:2222';
+    : `${host}${prefix}`;
 
 const baseURL = `${protocol}://${host}${prefix}/`;
 const ssrURL = `http://${ssrHost}/`;
