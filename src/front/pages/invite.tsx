@@ -36,7 +36,7 @@ const Invite = ({
         return router.replace('/');
       }
       dispatch(setRoom(room));
-      router.replace(`/register`);
+      router.replace(`/signin`);
     };
     login();
   }, [dispatch, router, room]);

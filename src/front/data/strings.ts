@@ -11,7 +11,9 @@ export const mainPageData = {
   regForm: 'Кто ты?',
   ifHasUUID: 'Если ты уже участник этой комнаты - введи сюда свой код',
   regFormText:
-    'Остался последний шаг. Представься и мы добавим тебя в комнату ',
+    'Остался последний шаг. Введи свой код и мы добавим тебя в комнату ',
+  signupText: 'В первый раз тут? ',
+  signinText: 'Уже зареган? ',
   create: 'Создать',
   back: 'Назад',
   yourCode:
@@ -23,6 +25,7 @@ export const mainPageData = {
   roomTitle: 'Выбор комнаты',
   enterRoomHeader: 'Введи код комнаты',
   enter: 'Войти',
+  signup: 'Зарегистрироваться',
   room: 'Комната ',
   createRoomForm: 'Новая комната',
   usersQuantity: 'Количество пользователей в комнате: ',
@@ -37,6 +40,10 @@ export const mainPageData = {
   removeUser: 'Удалить пользователя',
   lockSuccess: 'Ура! Пары составлены!',
   invitation: 'Ссылка для приглашения в комнату:',
+  interests:
+    'Опиши, что бы тебе хотелось и точно не хотелось получить в подарок.',
+    likes: 'Вот что ему нравится: ',
+    dislikes: 'А это не нравится: ',
 };
 
 export const mockMeta: MetaType = {

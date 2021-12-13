@@ -22,9 +22,7 @@ import { errorSelector, setError } from 'store/feaures/error';
 import Link from 'next/link';
 
 export interface Values {
-  name: string;
-  likes: string;
-  dislikes: string;
+  uuid: string;
 }
 
 const StyledForm = styled(Form)`
@@ -37,18 +35,9 @@ const StyledForm = styled(Form)`
     margin-top: 2rem;
   }
 
-  .h4 {
-    font-weight: 600;
-    width: 100%;
-    text-align: center;
-  }
-
   .p {
     margin-top: 1rem;
     font-size: 1rem;
-  }
-  .interests {
-    width: 100%;
   }
 
   .error {
@@ -57,9 +46,10 @@ const StyledForm = styled(Form)`
   }
 `;
 
-export const RegistrationForm = () => {
+export const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { putItem } = useLocalStorage();
   const room = useAppSelector(roomSelector);
   const { error } = useAppSelector(errorSelector);
 
@@ -68,6 +58,8 @@ export const RegistrationForm = () => {
       console.log('Комната не найдена, попробуйте зайти с главной страницы', {
         room,
       });
+      //   dispatch(setError(mainPageData.roomNotFoundGoHome));
+      //   setTimeout(() => dispatch(setError('')), 3000);
       router.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,12 +69,9 @@ export const RegistrationForm = () => {
     return null;
   }
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов'),
     uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
   });
-  const initialValues: Values = { name: '', likes: '', dislikes: '' };
+  const initialValues: Values = { uuid: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
@@ -92,20 +81,22 @@ export const RegistrationForm = () => {
     }
     console.log({ values });
 
-    const user = {
-      room_id: room.id,
-      name: values.name,
-      likes: values.likes,
-      dislikes: values.dislikes,
-    };
-    const userId = await makePostRequest<IApiResponse<string>>('/user', user);
-
     setSubmitting(false);
-    if (userId?.data) {
-      dispatch(setUser({ ...user, id: userId.data }));
-      router.push(`/room?userid=${userId.data}&roomid=${room.id}`);
+    const isMember = await makeGetRequest<IApiResponse<boolean>>(
+      `/room/${room.id}/ismember/${values.uuid}`,
+    );
+    console.log({ isMember });
+
+    if (isMember?.data) {
+      const user = await makeGetRequest<IApiResponse<IUser>>(
+        `/user/${values.uuid}/info`,
+      );
+      if (user.data) {
+        dispatch(setUser({ ...user.data, id: values.uuid }));
+        router.push(`/room?userid=${values.uuid}&roomid=${room.id}`);
+      }
     } else {
-      dispatch(setError(mainPageData.genericError));
+      dispatch(setError(mainPageData.userNotFound));
       setTimeout(() => dispatch(setError('')), 3000);
     }
   };
@@ -124,20 +115,11 @@ export const RegistrationForm = () => {
         <h3 className="h3">
           {mainPageData.regFormText}&quot;{room.name}&quot;
         </h3>
-        <TextInput name="name" type="text" placeholder="Имя пользователя" />
-        <div className="interests">
-          <h4 className="h4">{mainPageData.interests}</h4>
-          <TextInput name="likes" type="text" placeholder="Что тебе нравится" />
-          <TextInput
-            name="dislikes"
-            type="text"
-            placeholder="Что тебе не нравится"
-          />
-        </div>
+        <TextInput name="uuid" type="text" placeholder="Код пользователя" />
         <div className="login">
-          {mainPageData.signinText}
+          {mainPageData.signupText}
           <Link href="/signup">
-            <a>{mainPageData.enter}</a>
+            <a>{mainPageData.signup}</a>
           </Link>
         </div>
         {error && <div className="error">{error}</div>}
@@ -146,7 +128,7 @@ export const RegistrationForm = () => {
             {mainPageData.back}
           </Button>
           <Button type="submit" variant="primary">
-            {mainPageData.signup}
+            {mainPageData.enter}
           </Button>
         </div>
       </StyledForm>

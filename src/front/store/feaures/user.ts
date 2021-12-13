@@ -12,8 +12,8 @@ const initialState: IUserSlice = {
   id: '',
   room_id: '',
   name: '',
-  likes: [],
-  dislikes: [],
+  likes: '',
+  dislikes: '',
   isAdmin: false,
 };
 

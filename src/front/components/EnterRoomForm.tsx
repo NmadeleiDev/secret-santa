@@ -48,7 +48,7 @@ export const EnterRoomForm = () => {
     setSubmitting(false);
     if (roomName?.data) {
       dispatch(setRoom({ id: values.id, name: roomName.data }));
-      router.push('/register');
+      router.push('/signin');
     } else {
       dispatch(setError(mainPageData.roomNotFound));
       setTimeout(() => dispatch(setError('')), 3000);

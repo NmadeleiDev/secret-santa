@@ -3,11 +3,34 @@ import React, { useEffect, useState } from 'react';
 import { IUser } from 'types/UserType';
 import styled from 'styled-components';
 import { IBasicUser } from 'store/feaures/room';
+import { mainPageData } from 'data/strings';
 
 const StyledDiv = styled.div`
-  .name {
+  .success {
+    font-size: 2rem;
+    color: ${({ theme }) => theme.colors.text.dark};
+    margin-bottom: 1rem;
+    .name {
+      color: ${({ theme }) => theme.colors.primary.main};
+    }
+  }
+  .error {
     font-size: 1.2rem;
     color: ${({ theme }) => theme.colors.text.dark};
+  }
+
+  .interests {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    .text .value {
+      color: ${({ theme }) => theme.colors.text.dark};
+      font-weight: 400;
+    }
+
+    .value {
+      font-weight: 600;
+    }
   }
 `;
 
@@ -36,12 +59,25 @@ const Pair = ({ userid, users }: PairProps) => {
     };
 
     getPair();
-  }, []);
+  }, [userid, users]);
 
   return (
     <StyledDiv>
-      {pair && <h4 className="name">Ты будешь Сантой для {pair?.name}</h4>}
-      {error && <h4 className="name">{error}</h4>}
+      {pair && (
+        <>
+          <h4 className="success">
+            Тебе выпало быть Сантой для{' '}
+            <span className="name">{pair?.name}</span>
+          </h4>
+          <div className="interests">
+            <span className="text">{mainPageData.likes}</span>
+            <span className="value">{pair.likes}</span>
+            <span className="text">{mainPageData.dislikes}</span>
+            <span className="value">{pair.dislikes}</span>
+          </div>
+        </>
+      )}
+      {error && <h4 className="error">{error}</h4>}
     </StyledDiv>
   );
 };

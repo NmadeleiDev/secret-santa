@@ -108,18 +108,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const isAdminData = await ssrGetRequest<IApiResponse<boolean>>(
       `room/${roomid}/isadmin/${userid}`,
     );
-    const recipient = await ssrGetRequest<IApiResponse<boolean>>(
-      `user/${userid}/recipient`,
-    );
 
-    console.log({ recipient });
+    console.log({ userData, isAdminData });
 
-    if (
-      userData.data?.name &&
-      userData.data?.room_id &&
-      userData.data?.likes &&
-      userData.data?.dislikes
-    ) {
+    if (userData.data?.name && userData.data?.room_id) {
       user = {
         id: String(userid),
         ...userData.data,

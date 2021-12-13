@@ -54,8 +54,8 @@ export const CreateRoomForm = () => {
     const user = {
       room_id: '',
       name: values.username,
-      likes: [],
-      dislikes: [],
+      likes: '',
+      dislikes: '',
     };
     const userId = await makePostRequest<IApiResponse<string>>('/user', user);
 
