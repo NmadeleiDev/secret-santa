@@ -17,6 +17,8 @@ import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 export interface Values {
   username: string;
   roomname: string;
+  likes: string;
+  dislikes: string;
 }
 const StyledForm = styled(Form)`
   display: flex;
@@ -45,7 +47,12 @@ export const CreateRoomForm = () => {
       .max(50, 'Максимум 50 символов')
       .required('Введите имя'),
   });
-  const initialValues: Values = { username: '', roomname: '' };
+  const initialValues: Values = {
+    username: '',
+    roomname: '',
+    likes: '',
+    dislikes: '',
+  };
 
   const onSubmitHandler = async (
     values: Values,
@@ -54,8 +61,8 @@ export const CreateRoomForm = () => {
     const user = {
       room_id: '',
       name: values.username,
-      likes: '',
-      dislikes: '',
+      likes: values.likes,
+      dislikes: values.dislikes,
     };
     const userId = await makePostRequest<IApiResponse<string>>('/user', user);
 
@@ -83,7 +90,7 @@ export const CreateRoomForm = () => {
         }),
       );
       dispatch(setRoom({ ...room, id: roomId.data }));
-      router.push('/yourCode');
+      router.push(`/room?userid=${userId.data}&roomid=${roomId.data}`);
     }
   };
   const handleBack = (e: React.FormEvent) => {
@@ -100,6 +107,15 @@ export const CreateRoomForm = () => {
         <h2>{mainPageData.createRoomForm}</h2>
         <TextInput name="username" type="text" placeholder="Твое имя" />
         <TextInput name="roomname" type="text" placeholder="Название комнаты" />
+        <div className="interests">
+          <h4 className="h4">{mainPageData.interests}</h4>
+          <TextInput name="likes" type="text" placeholder="Что тебе нравится" />
+          <TextInput
+            name="dislikes"
+            type="text"
+            placeholder="Что тебе не нравится"
+          />
+        </div>
         {error && <div className="error">{error}</div>}
         <div className="buttons">
           <Button onClick={handleBack} variant="text">
