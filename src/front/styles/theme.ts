@@ -18,9 +18,9 @@ const light = {
     },
     base: {
       BG: '#FFFFFF',
-      darkerBG: '#EDF2F4',
+      darkerBG: '#f2e8cf',
       line: '#8D99AE',
-      shadow: '#B3C9D1',
+      shadow: '#E0C98F',
       warmBG: '#f2e8cf',
     },
     accent: {
