@@ -59,17 +59,17 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       `room/${roomid}/name`,
     );
     if (roomData?.data) {
-      const users = await ssrGetRequest<IApiResponse<IBasicUser[]>>(
-        `room/${roomid}/users`,
-      );
-      console.log({ users: users.data });
-
       room = {
         name: roomData.data,
-        users: users.data || [],
+        users: [],
         id: String(roomid),
         admin_id: '',
       };
+      const users = await ssrGetRequest<IApiResponse<IBasicUser[]>>(
+        `room/${roomid}/users?my_id=${userid}`,
+      );
+      console.log({ users: users.data });
+      room.users = users.data || [];
     }
   }
   if (userid) {
