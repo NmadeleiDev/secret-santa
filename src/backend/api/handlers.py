@@ -130,12 +130,12 @@ def apply_handlers(app: FastAPI, db: DbManager):
         """
         Сформировать пары в игре (доступно только админу комнаты)
         """
-        rid, ok = db.get_room_id_by_admin_id(admin_id)
+        room_id, ok = db.get_room_id_by_admin_id(admin_id)
         if ok is False:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response('you are not admin')
 
-        ids, ok = db.get_user_ids_in_room(room_id=rid)
+        ids, ok = db.get_user_ids_in_room(room_id=room_id)
         if ok is False:
             response.status_code = status.HTTP_400_BAD_REQUEST
             return error_response('failed to get room users')
