@@ -76,8 +76,10 @@ export const LoginForm = () => {
   if (!room.id) {
     return null;
   }
-  const validationSchema = Yup.object({
-    uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
+  const validationSchema = Yup.object().shape({
+    uuid: Yup.string()
+      .matches(UUID_REGEX, mainPageData.wrongFormat)
+      .required('Обязательное поле'),
   });
   const initialValues: Values = { uuid: '' };
   const onSubmitHandler = async (

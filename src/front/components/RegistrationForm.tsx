@@ -84,11 +84,17 @@ export const RegistrationForm = () => {
   if (!room.id) {
     return null;
   }
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов'),
-    uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
+      .max(50, 'Максимум 50 символов')
+      .required('Обязательное поле'),
+    likes: Yup.string()
+      .min(2, 'Минимум 2 символа')
+      .max(1000, 'Максимум 1000 символов'),
+    dislikes: Yup.string()
+      .min(2, 'Минимум 2 символа')
+      .max(1000, 'Максимум 1000 символов'),
   });
   const initialValues: Values = { name: '', likes: '', dislikes: '' };
   const onSubmitHandler = async (

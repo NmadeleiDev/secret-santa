@@ -37,15 +37,15 @@ export const CreateRoomForm = () => {
   const { putItem } = useLocalStorage();
   const { error } = useAppSelector(errorSelector);
 
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     username: Yup.string()
       .min(2, 'Минимум 2 символа')
       .max(50, 'Максимум 50 символов')
-      .required('Введите имя'),
+      .required('Введи имя'),
     roomname: Yup.string()
       .min(2, 'Минимум 2 символа')
       .max(50, 'Максимум 50 символов')
-      .required('Введите имя'),
+      .required('Введи название комнаты'),
   });
   const initialValues: Values = {
     username: '',

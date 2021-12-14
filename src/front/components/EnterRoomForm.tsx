@@ -32,10 +32,10 @@ export const EnterRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { error } = useAppSelector(errorSelector);
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     id: Yup.string()
       .matches(UUID_REGEX, mainPageData.wrongFormat)
-      .required('Введите код комнаты'),
+      .required('Введи код'),
   });
   const initialValues: Values = { id: '' };
   const onSubmitHandler = async (

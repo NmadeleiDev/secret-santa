@@ -202,7 +202,7 @@ const RoomPage = ({
           </h2>
           <span className="info">
             {mainPageData.usersQuantity} {room.users?.length}
-            {user?.room_id && (
+            {user?.room_id !== '' && (
               <div className="invite">
                 {mainPageData.invitation}
                 <CodeBlock text={getRoomLink(user.room_id)} />
