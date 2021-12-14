@@ -70,10 +70,18 @@ const Pair = ({ userid, users }: PairProps) => {
             <span className="name">{pair?.name}</span>
           </h4>
           <div className="interests">
-            <span className="text">{mainPageData.likes}</span>
-            <span className="value">{pair.likes}</span>
-            <span className="text">{mainPageData.dislikes}</span>
-            <span className="value">{pair.dislikes}</span>
+            {pair.likes && (
+              <>
+                <span className="text">{mainPageData.likes}</span>
+                <span className="value">{pair.likes}</span>
+              </>
+            )}
+            {pair.dislikes && (
+              <>
+                <span className="text">{mainPageData.dislikes}</span>
+                <span className="value">{pair.dislikes}</span>
+              </>
+            )}
           </div>
         </>
       )}
