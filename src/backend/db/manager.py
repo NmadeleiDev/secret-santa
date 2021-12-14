@@ -109,7 +109,7 @@ class DbManager():
 
         try:
             cursor.execute(query, (room_id, user_id, room_id))
-            return True
+            return True if cursor.rowcount == 1 else False
         except Exception as e:
             logging.error("Failed to update user room: {}".format(e))
             return False
