@@ -120,28 +120,34 @@ export const LoginForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      <StyledForm>
-        <h2>{mainPageData.regForm}</h2>
-        <h3 className="h3">
-          {mainPageData.regFormText}&quot;{room.name}&quot;
-        </h3>
-        <TextInput name="uuid" type="text" placeholder="Код пользователя" />
-        <div className="disclamer">
-          {mainPageData.signupText}
-          <Link href="/signup">
-            <a>{mainPageData.signup}</a>
-          </Link>
-        </div>
-        {error && <div className="error">{error}</div>}
-        <div className="buttons">
-          <Button onClick={handleBack} variant="text">
-            {mainPageData.back}
-          </Button>
-          <Button type="submit" variant="primary">
-            {mainPageData.enter}
-          </Button>
-        </div>
-      </StyledForm>
+      {({ isSubmitting, isValidating }) => (
+        <StyledForm>
+          <h2>{mainPageData.regForm}</h2>
+          <h3 className="h3">
+            {mainPageData.regFormText}&quot;{room.name}&quot;
+          </h3>
+          <TextInput name="uuid" type="text" placeholder="Код пользователя" />
+          <div className="disclamer">
+            {mainPageData.signupText}
+            <Link href="/signup" replace>
+              <a>{mainPageData.signup}</a>
+            </Link>
+          </div>
+          {error && <div className="error">{error}</div>}
+          <div className="buttons">
+            <Button onClick={handleBack} variant="text">
+              {mainPageData.back}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!isValidating && isSubmitting}
+            >
+              {mainPageData.enter}
+            </Button>
+          </div>
+        </StyledForm>
+      )}
     </Formik>
   );
 };

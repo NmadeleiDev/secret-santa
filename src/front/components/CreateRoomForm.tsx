@@ -103,29 +103,43 @@ export const CreateRoomForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      <StyledForm>
-        <h2>{mainPageData.createRoomForm}</h2>
-        <TextInput name="username" type="text" placeholder="Твое имя" />
-        <TextInput name="roomname" type="text" placeholder="Название комнаты" />
-        <div className="interests">
-          <h4 className="h4">{mainPageData.interests}</h4>
-          <TextInput name="likes" type="text" placeholder="Что тебе нравится" />
+      {({ isSubmitting, isValidating }) => (
+        <StyledForm>
+          <h2>{mainPageData.createRoomForm}</h2>
+          <TextInput name="username" type="text" placeholder="Твое имя" />
           <TextInput
-            name="dislikes"
+            name="roomname"
             type="text"
-            placeholder="Что тебе не нравится"
+            placeholder="Название комнаты"
           />
-        </div>
-        {error && <div className="error">{error}</div>}
-        <div className="buttons">
-          <Button onClick={handleBack} variant="text">
-            {mainPageData.back}
-          </Button>
-          <Button type="submit" variant="primary">
-            {mainPageData.create}
-          </Button>
-        </div>
-      </StyledForm>
+          <div className="interests">
+            <h4 className="h4">{mainPageData.interests}</h4>
+            <TextInput
+              name="likes"
+              type="text"
+              placeholder="Что тебе нравится"
+            />
+            <TextInput
+              name="dislikes"
+              type="text"
+              placeholder="Что тебе не нравится"
+            />
+          </div>
+          {error && <div className="error">{error}</div>}
+          <div className="buttons">
+            <Button onClick={handleBack} variant="text">
+              {mainPageData.back}
+            </Button>
+            <Button
+              disabled={!isValidating && isSubmitting}
+              type="submit"
+              variant="primary"
+            >
+              {mainPageData.create}
+            </Button>
+          </div>
+        </StyledForm>
+      )}
     </Formik>
   );
 };
