@@ -1,5 +1,4 @@
 import { LoginForm } from 'components/LoginForm';
-import { RegistrationForm } from 'components/RegistrationForm';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
 import { NextPage } from 'next';
