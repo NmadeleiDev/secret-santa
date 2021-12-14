@@ -1,11 +1,22 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-
+import Image from 'next/image';
 class MyDocument extends Document {
   render() {
     return (
       <Html>
         <Head>
+          <noscript>
+            <div>
+              <Image
+                src="https://mc.yandex.ru/watch/86791265"
+                className="visuallyHidden"
+                width={1}
+                height={1}
+                alt=""
+              />
+            </div>
+          </noscript>
           <link rel="icon" href="/favicon.ico" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link

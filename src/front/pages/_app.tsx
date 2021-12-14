@@ -5,6 +5,9 @@ import theme from 'styles/theme';
 import { Provider } from 'react-redux';
 import { store } from 'store/store';
 import Snowfall from 'react-snowfall';
+import ym, { YMInitializer } from 'react-yandex-metrika';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 export const host =
   process.env.NODE_ENV === 'production'
@@ -18,9 +21,30 @@ export const protocol =
     : 'http';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      if (!process.env.NEXT_PUBLIC_YM_ID) return;
+      ym(process.env.NEXT_PUBLIC_YM_ID, 'hit', url);
+    };
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!process.env.NEXT_PUBLIC_YM_ID)
+    return <div>NEXT_PUBLIC_YM_ID is not set</div>;
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <YMInitializer
+          accounts={[+process.env.NEXT_PUBLIC_YM_ID]}
+          options={{ defer: true }}
+        />
         <Component {...pageProps} />
         <Snowfall color="white" />
       </ThemeProvider>
