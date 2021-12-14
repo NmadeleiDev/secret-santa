@@ -84,11 +84,17 @@ export const RegistrationForm = () => {
   if (!room.id) {
     return null;
   }
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов'),
-    uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
+      .max(50, 'Максимум 50 символов')
+      .required('Обязательное поле'),
+    likes: Yup.string()
+      .min(2, 'Минимум 2 символа')
+      .max(1000, 'Максимум 1000 символов'),
+    dislikes: Yup.string()
+      .min(2, 'Минимум 2 символа')
+      .max(1000, 'Максимум 1000 символов'),
   });
   const initialValues: Values = { name: '', likes: '', dislikes: '' };
   const onSubmitHandler = async (
@@ -127,37 +133,47 @@ export const RegistrationForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      <StyledForm>
-        <h2>{mainPageData.regForm}</h2>
-        <h3 className="h3">
-          {mainPageData.regFormText}&quot;{room.name}&quot;
-        </h3>
-        <TextInput name="name" type="text" placeholder="Имя пользователя" />
-        <div className="interests">
-          <h4 className="h4">{mainPageData.interests}</h4>
-          <TextInput name="likes" type="text" placeholder="Что тебе нравится" />
-          <TextInput
-            name="dislikes"
-            type="text"
-            placeholder="Что тебе не нравится"
-          />
-        </div>
-        <div className="disclamer">
-          {mainPageData.signinText}
-          <Link href="/signin">
-            <a>{mainPageData.enter}</a>
-          </Link>
-        </div>
-        {error && <div className="error">{error}</div>}
-        <div className="buttons">
-          <Button onClick={handleBack} variant="text">
-            {mainPageData.back}
-          </Button>
-          <Button type="submit" variant="primary">
-            {mainPageData.signup}
-          </Button>
-        </div>
-      </StyledForm>
+      {({ isSubmitting, isValidating }) => (
+        <StyledForm>
+          <h2>{mainPageData.regForm}</h2>
+          <h3 className="h3">
+            {mainPageData.regFormText}&quot;{room.name}&quot;
+          </h3>
+          <TextInput name="name" type="text" placeholder="Имя пользователя" />
+          <div className="interests">
+            <h4 className="h4">{mainPageData.interests}</h4>
+            <TextInput
+              name="likes"
+              type="text"
+              placeholder="Что тебе нравится"
+            />
+            <TextInput
+              name="dislikes"
+              type="text"
+              placeholder="Что тебе не нравится"
+            />
+          </div>
+          <div className="disclamer">
+            {mainPageData.signinText}
+            <Link href="/signin" replace>
+              <a>{mainPageData.enter}</a>
+            </Link>
+          </div>
+          {error && <div className="error">{error}</div>}
+          <div className="buttons">
+            <Button onClick={handleBack} variant="text">
+              {mainPageData.back}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!isValidating && isSubmitting}
+            >
+              {mainPageData.signup}
+            </Button>
+          </div>
+        </StyledForm>
+      )}
     </Formik>
   );
 };

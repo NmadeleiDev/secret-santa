@@ -5,9 +5,10 @@ import Button from './Button';
 import { IoIosClose } from 'react-icons/io';
 import { mainPageData } from 'data/strings';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import { userSelector } from 'store/feaures/user';
+import { setRecipient, userSelector } from 'store/feaures/user';
 import { IApiResponse, makeGetRequest } from 'axiosConfig';
 import { removeUser, roomSelector } from 'store/feaures/room';
+import { IUser } from 'types/UserType';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -84,6 +85,22 @@ const User = ({ name, id, enableDelete, className }: Props) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
   const url = `http://www.tinygraphs.com/spaceinvaders/${name}?size=100&theme=sugarsweets&numcolors=4`;
+
+  const assignPairs = async () => {
+    const lock = await makeGetRequest<IApiResponse<string>>(
+      `/room/${user?.id}/lock`,
+    );
+
+    if (lock?.data) {
+      const pair = await makeGetRequest<IApiResponse<IUser>>(
+        `user/${user.id}/recipient`,
+      );
+      if (pair.data) {
+        dispatch(setRecipient(pair.data));
+      }
+    }
+  };
+
   const deleteUser = async () => {
     const res = await makeGetRequest<IApiResponse<string>>(
       `/admin/${user.id}/delete/${id}`,
@@ -91,6 +108,7 @@ const User = ({ name, id, enableDelete, className }: Props) => {
     console.log({ res });
     if (res.data) {
       dispatch(removeUser(id));
+      assignPairs();
     }
   };
   return (

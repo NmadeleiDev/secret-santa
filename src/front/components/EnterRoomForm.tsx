@@ -11,7 +11,7 @@ import { IUser } from 'types/UserType';
 import { mainPageData } from 'data/strings';
 import { errorSelector, setError } from 'store/feaures/error';
 import { setRoom } from 'store/feaures/room';
-import { UUID_REGEX } from 'utils';
+import { UUID_REGEX, UUID_REGEX_GROUP } from 'utils';
 
 export interface Values {
   id: string;
@@ -32,22 +32,26 @@ export const EnterRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { error } = useAppSelector(errorSelector);
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     id: Yup.string()
-      .matches(UUID_REGEX, mainPageData.wrongFormat)
-      .required('Введите код комнаты'),
+      .matches(UUID_REGEX_GROUP, mainPageData.wrongFormat)
+      .required('Введи код'),
   });
   const initialValues: Values = { id: '' };
   const onSubmitHandler = async (
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
+    const match = values.id.match(UUID_REGEX_GROUP);
+    if (!match) return setSubmitting(false);
+
+    const id = match[1] || match[3];
     const roomName = await makeGetRequest<IApiResponse<string>>(
-      `/room/${values.id}/name`,
+      `/room/${id}/name`,
     );
     setSubmitting(false);
     if (roomName?.data) {
-      dispatch(setRoom({ id: values.id, name: roomName.data }));
+      dispatch(setRoom({ id, name: roomName.data }));
       router.push('/signin');
     } else {
       dispatch(setError(mainPageData.roomNotFound));
@@ -64,17 +68,25 @@ export const EnterRoomForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      <StyledForm>
-        <h2>{mainPageData.enterRoomHeader}</h2>
-        <TextInput name="id" type="text" placeholder="Код комнаты" />
-        <div className="buttons">
-          <Button variant="primary">{mainPageData.enter}</Button>
-          <Button type="submit" onClick={handleBack} variant="text">
-            {mainPageData.back}
-          </Button>
-        </div>
-        {error && <div className="error">{error}</div>}
-      </StyledForm>
+      {({ isSubmitting, isValidating }) => (
+        <StyledForm>
+          <h2>{mainPageData.enterRoomHeader}</h2>
+          <TextInput name="id" type="text" placeholder="Код комнаты" />
+          <div className="buttons">
+            <Button variant="text" onClick={handleBack}>
+              {mainPageData.back}
+            </Button>
+            <Button
+              type="submit"
+              disabled={!isValidating && isSubmitting}
+              variant="primary"
+            >
+              {mainPageData.enter}
+            </Button>
+          </div>
+          {error && <div className="error">{error}</div>}
+        </StyledForm>
+      )}
     </Formik>
   );
 };

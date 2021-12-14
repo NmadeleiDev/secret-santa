@@ -76,8 +76,10 @@ export const LoginForm = () => {
   if (!room.id) {
     return null;
   }
-  const validationSchema = Yup.object({
-    uuid: Yup.string().matches(UUID_REGEX, mainPageData.wrongFormat),
+  const validationSchema = Yup.object().shape({
+    uuid: Yup.string()
+      .matches(UUID_REGEX, mainPageData.wrongFormat)
+      .required('Обязательное поле'),
   });
   const initialValues: Values = { uuid: '' };
   const onSubmitHandler = async (
@@ -89,7 +91,6 @@ export const LoginForm = () => {
     }
     console.log({ values });
 
-    setSubmitting(false);
     const isMember = await makeGetRequest<IApiResponse<boolean>>(
       `/room/${room.id}/ismember/${values.uuid}`,
     );
@@ -107,6 +108,7 @@ export const LoginForm = () => {
       dispatch(setError(mainPageData.userNotFound));
       setTimeout(() => dispatch(setError('')), 3000);
     }
+    setSubmitting(false);
   };
   const handleBack = (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,28 +120,34 @@ export const LoginForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      <StyledForm>
-        <h2>{mainPageData.regForm}</h2>
-        <h3 className="h3">
-          {mainPageData.regFormText}&quot;{room.name}&quot;
-        </h3>
-        <TextInput name="uuid" type="text" placeholder="Код пользователя" />
-        <div className="disclamer">
-          {mainPageData.signupText}
-          <Link href="/signup">
-            <a>{mainPageData.signup}</a>
-          </Link>
-        </div>
-        {error && <div className="error">{error}</div>}
-        <div className="buttons">
-          <Button onClick={handleBack} variant="text">
-            {mainPageData.back}
-          </Button>
-          <Button type="submit" variant="primary">
-            {mainPageData.enter}
-          </Button>
-        </div>
-      </StyledForm>
+      {({ isSubmitting, isValidating }) => (
+        <StyledForm>
+          <h2>{mainPageData.regForm}</h2>
+          <h3 className="h3">
+            {mainPageData.regFormText}&quot;{room.name}&quot;
+          </h3>
+          <TextInput name="uuid" type="text" placeholder="Код пользователя" />
+          <div className="disclamer">
+            {mainPageData.signupText}
+            <Link href="/signup" replace>
+              <a>{mainPageData.signup}</a>
+            </Link>
+          </div>
+          {error && <div className="error">{error}</div>}
+          <div className="buttons">
+            <Button onClick={handleBack} variant="text">
+              {mainPageData.back}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!isValidating && isSubmitting}
+            >
+              {mainPageData.enter}
+            </Button>
+          </div>
+        </StyledForm>
+      )}
     </Formik>
   );
 };
