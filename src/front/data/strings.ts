@@ -1,13 +1,13 @@
 import MetaType from 'types/MetaType';
 
 export const mainPageData = {
-  title: 'Тайный санта',
+  title: 'Тайный Cанта',
   description: 'Поделись новогодним настроением с друзьями',
   registerHeader: 'Регистрация',
   createRoom: 'Создать комнату',
   successRegHeader: 'Поздравляю, ты в игре!',
   enterRoom: 'Войти в комнату',
-  fabToolpip: 'Кто такой "Тайный санта"?',
+  fabToolpip: 'Кто такой "Тайный Санта"?',
   regForm: 'Кто ты?',
   ifHasUUID: 'Если ты уже участник этой комнаты - введи сюда свой код',
   regFormText:
@@ -42,23 +42,24 @@ export const mainPageData = {
   invitation: 'Ссылка для приглашения в комнату:',
   interests:
     'Опиши, что бы тебе хотелось и точно не хотелось получить в подарок.',
-    likes: 'Вот что ему нравится: ',
-    dislikes: 'А это не нравится: ',
+  likes: 'Вот что ему нравится: ',
+  dislikes: 'А это не нравится: ',
 };
 
 export const mockMeta: MetaType = {
   title: 'Secret santa',
   description: 'Тайный санта. Собери друзей и твори магию рождества',
-  keywords: 'christmas, present',
+  keywords:
+    'christmas, present, Santa Claus, new year, secret, game, новый год, игра, рождество, Санта Клаус',
   ogTitle: 'Secret santa',
-  ogDescription: 'Secret santa',
+  ogDescription: 'Тайный санта. Собери друзей и твори магию рождества',
   ogSiteName: 'Secret santa',
-  ogUrl: 'Secret santa',
+  ogUrl: 'https://santa-santa.ru',
   // ogImage: 'Secret santa',
   // ogImageSecureUrl: 'Secret santa',
-  twitterTitle: 'Secret santa',
-  twitterDescription: 'Secret santa',
-  twitterUrl: 'Secret santa',
-  twitterCard: 'Secret santa',
+  // twitterTitle: 'Secret santa',
+  // twitterDescription: 'Secret santa',
+  // twitterUrl: 'Secret santa',
+  // twitterCard: 'Secret santa',
   // twitterImage: 'Secret santa',
 };
