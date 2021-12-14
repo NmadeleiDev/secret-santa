@@ -45,6 +45,7 @@ export const mainPageData = {
     'Опиши, что бы тебе хотелось и точно не хотелось получить в подарок.',
   likes: 'Вот что ему нравится: ',
   dislikes: 'А это не нравится: ',
+  chooseAnotherName: 'Кто-то уже занял это имя в этой комнате. Выбери другое.',
 };
 
 export const mockMeta: MetaType = {

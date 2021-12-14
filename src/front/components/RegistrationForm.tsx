@@ -101,10 +101,14 @@ export const RegistrationForm = () => {
     values: Values,
     { setSubmitting }: FormikHelpers<Values>,
   ) => {
+    console.log({ values });
     if (!room.id) {
       return;
     }
-    console.log({ values });
+    if (room.users?.find((user) => user.name === values.name)) {
+      dispatch(setError(mainPageData.chooseAnotherName));
+      return;
+    }
 
     const user = {
       room_id: room.id,
