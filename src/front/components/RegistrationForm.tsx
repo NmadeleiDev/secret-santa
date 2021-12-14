@@ -45,9 +45,15 @@ const StyledForm = styled(Form)`
     text-align: center;
   }
 
-  .p {
-    margin-top: 1rem;
-    font-size: 1rem;
+  .disclamer {
+    margin: 2rem 0;
+    font-size: 1.2rem;
+    a {
+      color: ${({ theme }) => theme.colors.primary.main};
+    }
+    a:visited {
+      color: ${({ theme }) => theme.colors.primary.dark};
+    }
   }
   .interests {
     width: 100%;
@@ -136,7 +142,7 @@ export const RegistrationForm = () => {
             placeholder="Что тебе не нравится"
           />
         </div>
-        <div className="login">
+        <div className="disclamer">
           {mainPageData.signinText}
           <Link href="/signin">
             <a>{mainPageData.enter}</a>

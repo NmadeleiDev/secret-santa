@@ -16,7 +16,12 @@ import {
   roomSelector,
   setRoom,
 } from 'store/feaures/room';
-import { IUserSlice, setRecipient, setUser, userSelector } from 'store/feaures/user';
+import {
+  IUserSlice,
+  setRecipient,
+  setUser,
+  userSelector,
+} from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 import { IUser } from 'types/UserType';

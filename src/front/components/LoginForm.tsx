@@ -37,9 +37,15 @@ const StyledForm = styled(Form)`
     width: 100%;
   }
 
-  .p {
-    margin-top: 1rem;
-    font-size: 1rem;
+  .disclamer {
+    margin: 2rem 0;
+    font-size: 1.2rem;
+    a {
+      color: ${({ theme }) => theme.colors.primary.main};
+    }
+    a:visited {
+      color: ${({ theme }) => theme.colors.primary.dark};
+    }
   }
 
   .error {
@@ -118,7 +124,7 @@ export const LoginForm = () => {
           {mainPageData.regFormText}&quot;{room.name}&quot;
         </h3>
         <TextInput name="uuid" type="text" placeholder="Код пользователя" />
-        <div className="login">
+        <div className="disclamer">
           {mainPageData.signupText}
           <Link href="/signup">
             <a>{mainPageData.signup}</a>
