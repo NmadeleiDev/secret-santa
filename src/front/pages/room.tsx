@@ -145,18 +145,14 @@ const RoomPage = ({
   }, []);
 
   const lockRoom = async () => {
-    console.log('lockRoom');
-
     const lock = await makeGetRequest<IApiResponse<string>>(
       `/room/${user?.id}/lock`,
     );
-    console.log({ lock });
+
     if (lock?.data) {
       const pair = await makeGetRequest<IApiResponse<IUser>>(
         `user/${user.id}/recipient`,
       );
-      console.log({ pair });
-
       if (pair.data) {
         dispatch(setRecipient(pair.data));
       }

@@ -91,7 +91,6 @@ export const LoginForm = () => {
     }
     console.log({ values });
 
-    setSubmitting(false);
     const isMember = await makeGetRequest<IApiResponse<boolean>>(
       `/room/${room.id}/ismember/${values.uuid}`,
     );
@@ -109,6 +108,7 @@ export const LoginForm = () => {
       dispatch(setError(mainPageData.userNotFound));
       setTimeout(() => dispatch(setError('')), 3000);
     }
+    setSubmitting(false);
   };
   const handleBack = (e: React.FormEvent) => {
     e.preventDefault();
