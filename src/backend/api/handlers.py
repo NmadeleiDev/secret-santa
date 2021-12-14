@@ -67,6 +67,9 @@ def apply_handlers(app: FastAPI, db: DbManager):
         """
         Создание пользователя, возвращает его id (код)
         """
+        if len(body.name) < 3:
+            response.status_code = status.HTTP_400_BAD_REQUEST
+            return error_response('name too short')
         uid, ok = db.insert_user(name=body.name, room_id=body.room_id, likes=body.likes, dislikes=body.dislikes)
         if ok is False:
             response.status_code = status.HTTP_400_BAD_REQUEST
