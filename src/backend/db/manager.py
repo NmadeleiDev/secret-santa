@@ -50,7 +50,7 @@ class DbManager():
 
     #CRUD user
     @cursor_wrapper
-    def insert_user(self, name: str, room_id: int, likes: str, dislikes: str, cursor=None) -> Tuple[str, bool]:
+    def insert_user(self, name: str, room_id: str, likes: str, dislikes: str, cursor=None) -> Tuple[str, bool]:
 
         query = """INSERT INTO santa.user (name, room_id, likes, dislikes) VALUES (%s,%s,%s,%s) RETURNING id"""
 
@@ -102,14 +102,14 @@ class DbManager():
             return False
 
     @cursor_wrapper
-    def update_user_room_id(self, user_id: str, room_id: int, cursor=None) -> bool:
+    def update_user_room_id(self, user_id: str, room_id: str, cursor=None) -> bool:
         query = """UPDATE santa.user 
                 SET room_id=%s
                 WHERE id=%s AND (room_id='' OR room_id=%s)"""
 
         try:
             cursor.execute(query, (room_id, user_id, room_id))
-            return True
+            return True if cursor.rowcount == 1 else False
         except Exception as e:
             logging.error("Failed to update user room: {}".format(e))
             return False
