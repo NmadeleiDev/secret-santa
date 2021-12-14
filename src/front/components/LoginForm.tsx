@@ -92,11 +92,11 @@ export const LoginForm = () => {
     console.log({ values });
 
     const isMember = await makeGetRequest<IApiResponse<boolean>>(
-      `/room/${room.id}/ismember/${values.uuid}`,
+      `/user/${values.uuid}/enter/${room.id}`,
     );
     console.log({ isMember });
 
-    if (isMember?.data) {
+    if (isMember.status) {
       const user = await makeGetRequest<IApiResponse<IUser>>(
         `/user/${values.uuid}/info`,
       );
@@ -126,7 +126,7 @@ export const LoginForm = () => {
           <h3 className="h3">
             {mainPageData.ifHasUUID}
             <Link href="/signup" replace>
-              <a>зарегистрируйся</a>
+              <a>{mainPageData.register}</a>
             </Link>
           </h3>
           <TextInput name="uuid" type="text" placeholder="Код пользователя" />

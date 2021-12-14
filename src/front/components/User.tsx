@@ -87,6 +87,13 @@ const User = ({ name, id, enableDelete, className }: Props) => {
   const url = `http://www.tinygraphs.com/spaceinvaders/${name}?size=100&theme=sugarsweets&numcolors=4`;
 
   const assignPairs = async () => {
+    const pair = await makeGetRequest<IApiResponse<IUser>>(
+      `user/${user.id}/recipient`,
+    );
+    if (!pair.status) {
+      return;
+    }
+
     const lock = await makeGetRequest<IApiResponse<string>>(
       `/room/${user?.id}/lock`,
     );
