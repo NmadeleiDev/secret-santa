@@ -4,6 +4,8 @@ import { IUser } from 'types/UserType';
 import styled from 'styled-components';
 import { IBasicUser } from 'store/feaures/room';
 import { mainPageData } from 'data/strings';
+import { useAppDispatch, useAppSelector } from 'store/store';
+import { setRecipient, userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
   .success {
@@ -40,7 +42,8 @@ interface PairProps {
 }
 
 const Pair = ({ userid, users }: PairProps) => {
-  const [pair, setPair] = useState<IUser | null>(null);
+  const dispatch = useAppDispatch();
+  const { recipient } = useAppSelector(userSelector);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -54,32 +57,32 @@ const Pair = ({ userid, users }: PairProps) => {
         setError('Пары еще не назначены. Это может сделать админ комнаты');
         return;
       } else if (pair.data) {
-        setPair(pair.data);
+        dispatch(setRecipient(pair.data));
       }
     };
 
     getPair();
-  }, [userid, users]);
+  }, [userid, dispatch, users]);
 
   return (
     <StyledDiv>
-      {pair && (
+      {recipient && (
         <>
           <h4 className="success">
             Тебе выпало быть Сантой для{' '}
-            <span className="name">{pair?.name}</span>
+            <span className="name">{recipient?.name}</span>
           </h4>
           <div className="interests">
-            {pair.likes && (
+            {recipient.likes && (
               <>
                 <span className="text">{mainPageData.likes}</span>
-                <span className="value">{pair.likes}</span>
+                <span className="value">{recipient.likes}</span>
               </>
             )}
-            {pair.dislikes && (
+            {recipient.dislikes && (
               <>
                 <span className="text">{mainPageData.dislikes}</span>
-                <span className="value">{pair.dislikes}</span>
+                <span className="value">{recipient.dislikes}</span>
               </>
             )}
           </div>

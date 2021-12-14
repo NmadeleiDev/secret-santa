@@ -6,6 +6,7 @@ import { boolean } from 'yup/lib/locale';
 export interface IUserSlice extends IUser {
   id: string;
   isAdmin?: boolean;
+  recipient?: IUser;
 }
 
 const initialState: IUserSlice = {
@@ -30,6 +31,9 @@ const userSlice = createSlice({
     setIsAdmin(state, { payload }: PayloadAction<boolean>) {
       state.isAdmin = payload;
     },
+    setRecipient(state, { payload }: PayloadAction<IUser>) {
+      state.recipient = payload;
+    },
     resetUser() {
       return initialState;
     },
@@ -39,4 +43,5 @@ const userSlice = createSlice({
 export const userSelector = (state: RootState) => state.user;
 
 export default userSlice.reducer;
-export const { setUser, setRoomID, setIsAdmin, resetUser } = userSlice.actions;
+export const { setUser, setRoomID, setIsAdmin, setRecipient, resetUser } =
+  userSlice.actions;

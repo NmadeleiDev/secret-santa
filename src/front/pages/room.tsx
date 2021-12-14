@@ -16,7 +16,7 @@ import {
   roomSelector,
   setRoom,
 } from 'store/feaures/room';
-import { IUserSlice, setUser, userSelector } from 'store/feaures/user';
+import { IUserSlice, setRecipient, setUser, userSelector } from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import styled from 'styled-components';
 import { IUser } from 'types/UserType';
@@ -147,6 +147,15 @@ const RoomPage = ({
     );
     console.log({ lock });
     if (lock?.data) {
+      const pair = await makeGetRequest<IApiResponse<IUser>>(
+        `user/${user.id}/recipient`,
+      );
+      console.log({ pair });
+
+      if (pair.data) {
+        dispatch(setRecipient(pair.data));
+      }
+
       dispatch(setSuccess(mainPageData.lockSuccess));
       setTimeout(() => dispatch(setSuccess('')), 3000);
     } else {
