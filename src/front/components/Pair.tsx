@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from 'store/store';
 import { setRecipient, userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
-  .success {
+  .h4-pair {
     font-size: 2rem;
     color: ${({ theme }) => theme.colors.text.dark};
     margin-bottom: 1rem;
@@ -68,7 +68,7 @@ const Pair = ({ userid, users }: PairProps) => {
     <StyledDiv>
       {recipient && (
         <>
-          <h4 className="success">
+          <h4 className="h4-pair">
             Тебе выпало быть Сантой для{' '}
             <span className="name">{recipient?.name}</span>
           </h4>
