@@ -105,10 +105,10 @@ class DbManager():
     def update_user_room_id(self, user_id: str, room_id: int, cursor=None) -> bool:
         query = """UPDATE santa.user 
                 SET room_id=%s
-                WHERE id=%s"""
+                WHERE id=%s AND (room_id='' OR room_id=%s)"""
 
         try:
-            cursor.execute(query, (room_id, user_id))
+            cursor.execute(query, (room_id, user_id, room_id))
             return True
         except Exception as e:
             logging.error("Failed to update user room: {}".format(e))
