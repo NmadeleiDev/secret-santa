@@ -30,6 +30,12 @@ const StyledForm = styled(Form)`
   flex-direction: column;
   align-items: center;
 
+  a {
+    color: ${({ theme }) => theme.colors.primary.main};
+  }
+  a:visited {
+    color: ${({ theme }) => theme.colors.primary.dark};
+  }
   .h3 {
     font-size: 1.2rem;
     margin-top: 2rem;
@@ -40,12 +46,6 @@ const StyledForm = styled(Form)`
   .disclamer {
     margin: 2rem 0;
     font-size: 1.2rem;
-    a {
-      color: ${({ theme }) => theme.colors.primary.main};
-    }
-    a:visited {
-      color: ${({ theme }) => theme.colors.primary.dark};
-    }
   }
 
   .error {
@@ -124,7 +124,10 @@ export const LoginForm = () => {
         <StyledForm>
           <h2>{mainPageData.regForm}</h2>
           <h3 className="h3">
-            {mainPageData.regFormText}&quot;{room.name}&quot;
+            {mainPageData.ifHasUUID}
+            <Link href="/signup" replace>
+              <a>зарегистрируйся</a>
+            </Link>
           </h3>
           <TextInput name="uuid" type="text" placeholder="Код пользователя" />
           <div className="disclamer">
