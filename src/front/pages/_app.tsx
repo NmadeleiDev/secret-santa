@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       if (!process.env.NEXT_PUBLIC_YM_ID) return;
-      ym(process.env.NEXT_PUBLIC_YM_ID, 'hit', url);
+      ym('hit', url);
     };
-    router.events.on('routeChangeStart', handleRouteChange);
+    router.events.on('routeChangeComplete', handleRouteChange);
 
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
