@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { mainPageData } from 'data/strings';
 import Image from 'next/image';
 import Button from './Button';
 import { IoIosClose } from 'react-icons/io';
-import { mainPageData } from 'data/strings';
+import { IUser } from 'types/UserType';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { setRecipient, userSelector } from 'store/feaures/user';
 import { IApiResponse, makeGetRequest } from 'axiosConfig';
-import { removeUser, roomSelector } from 'store/feaures/room';
-import { IUser } from 'types/UserType';
+import { removeUser } from 'store/feaures/room';
 import toast from 'react-hot-toast';
 
 const StyledDiv = styled.div`
@@ -42,7 +42,8 @@ const StyledDiv = styled.div`
     }
 
     .cross {
-      font-size: 2rem;
+      margin-left: 2rem;
+      font-size: 1rem;
       color: ${({ theme }) => theme.colors.primary.main};
     }
 
@@ -60,8 +61,10 @@ const StyledDiv = styled.div`
       background-color: ${({ theme }) => theme.colors.base.darkerBG};
       box-shadow: 0 0 10px ${({ theme }) => theme.colors.base.shadow};
       z-index: 4;
-      bottom: 0.2rem;
-      left: 30px;
+      /* bottom: 0.2rem;
+      left: 30px; */
+      bottom: -5px;
+      left: 60px;
     }
 
     &:hover {
@@ -114,7 +117,6 @@ const User = ({ name, id, enableDelete, className }: Props) => {
     const res = await makeGetRequest<IApiResponse<string>>(
       `/admin/${user.id}/delete/${id}`,
     );
-    console.log({ res });
     if (res.data) {
       dispatch(removeUser(id));
       assignPairs();
@@ -132,7 +134,8 @@ const User = ({ name, id, enableDelete, className }: Props) => {
       <div className="name">{name}</div>
       {enableDelete && id !== user.id ? (
         <Button onClick={deleteUser} variant="text" className="button">
-          <IoIosClose className="cross" />
+          {/* <IoIosClose className="cross" /> */}
+          <span className="cross">❌</span>
           <span className="tooltip">{mainPageData.removeUser}</span>
         </Button>
       ) : null}

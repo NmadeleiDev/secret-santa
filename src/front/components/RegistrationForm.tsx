@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Formik, FormikHelpers } from 'formik';
-import styled from 'styled-components';
-import * as Yup from 'yup';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import styled from 'styled-components';
+import { Form, Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import { mainPageData } from 'data/strings';
 import { TextInput } from './Input';
 import Button from './Button';
-import {
-  api,
-  IApiResponse,
-  makeGetRequest,
-  makePostRequest,
-} from 'axiosConfig';
+import { IApiResponse, makePostRequest } from 'axiosConfig';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { setUser } from 'store/feaures/user';
-import { mainPageData } from 'data/strings';
-import { useLocalStorage } from 'hooks/useLocalStorage';
 import { roomSelector } from 'store/feaures/room';
-import { IUser } from 'types/UserType';
-import { UUID_REGEX } from 'utils';
-import { errorSelector, setError } from 'store/feaures/error';
-import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 export interface Values {
@@ -28,41 +19,34 @@ export interface Values {
   dislikes: string;
 }
 
-const StyledForm = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledDiv = styled.div`
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 4rem;
 
-  .h3 {
-    font-size: 1.2rem;
-    margin-top: 2rem;
-    text-align: center;
-    width: 100%;
-  }
-
-  .h4 {
-    font-weight: 600;
-    width: 100%;
-    text-align: center;
-  }
-
-  .disclamer {
-    margin: 2rem 0;
-    font-size: 1.2rem;
-    a {
-      color: ${({ theme }) => theme.colors.primary.main};
+    .h3 {
+      font-weight: 600;
+      margin-top: 2rem;
+      text-align: center;
     }
-    a:visited {
-      color: ${({ theme }) => theme.colors.primary.dark};
-    }
-  }
-  .interests {
-    width: 100%;
-  }
 
-  .error {
-    color: ${({ theme }) => theme.colors.primary.main};
-    font-size: 1rem;
+    .h4 {
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    }
+
+    .disclamer {
+      margin: 1rem 0;
+      font-size: 1.2rem;
+    }
+
+    .disclamer,
+    .buttons {
+      text-align: center;
+    }
   }
 `;
 
@@ -70,7 +54,6 @@ export const RegistrationForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const room = useAppSelector(roomSelector);
-  const { error } = useAppSelector(errorSelector);
 
   useEffect(() => {
     if (!room.id) {
@@ -138,45 +121,52 @@ export const RegistrationForm = () => {
       onSubmit={onSubmitHandler}
     >
       {({ isSubmitting, isValidating }) => (
-        <StyledForm>
-          <h2>{mainPageData.regForm}</h2>
-          <h3 className="h3">
-            {mainPageData.regFormText}&quot;{room.name}&quot;
-          </h3>
-          <TextInput name="name" type="text" placeholder="Имя пользователя" />
-          <div className="interests">
-            <h4 className="h4">{mainPageData.interests}</h4>
-            <TextInput
-              name="likes"
-              type="text"
-              placeholder="Что тебе нравится"
-            />
-            <TextInput
-              name="dislikes"
-              type="text"
-              placeholder="Что тебе не нравится"
-            />
-          </div>
-          <div className="disclamer">
-            {mainPageData.signinText}
-            <Link href="/signin" replace>
-              <a>{mainPageData.enter}</a>
-            </Link>
-          </div>
-          {error && <div className="error">{error}</div>}
-          <div className="buttons">
-            <Button onClick={handleBack} variant="text">
-              {mainPageData.back}
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={!isValidating && isSubmitting}
-            >
-              {mainPageData.signup}
-            </Button>
-          </div>
-        </StyledForm>
+        <StyledDiv>
+          <h1>{mainPageData.regForm}</h1>
+          <Form className="form">
+            <fieldset>
+              <legend className="h3">
+                {mainPageData.regFormText}&quot;{room.name}&quot;
+              </legend>
+              <TextInput
+                name="name"
+                type="text"
+                placeholder="Имя пользователя"
+              />
+            </fieldset>
+            <fieldset className="interests">
+              <legend className="h4">{mainPageData.interests}</legend>
+              <TextInput
+                name="likes"
+                type="text"
+                placeholder="Что тебе нравится"
+              />
+              <TextInput
+                name="dislikes"
+                type="text"
+                placeholder="Что тебе не нравится"
+              />
+            </fieldset>
+            <fieldset className="disclamer">
+              {mainPageData.signinText}
+              <Link href="/signin" replace>
+                <a>{mainPageData.enter}</a>
+              </Link>
+            </fieldset>
+            <fieldset className="buttons">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={!isValidating && isSubmitting}
+              >
+                {mainPageData.signup}
+              </Button>
+              <Button onClick={handleBack} variant="text">
+                {mainPageData.back}
+              </Button>
+            </fieldset>
+          </Form>
+        </StyledDiv>
       )}
     </Formik>
   );

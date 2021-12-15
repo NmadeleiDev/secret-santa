@@ -1,9 +1,8 @@
-import { CreateRoomForm } from 'components/CreateRoomForm';
+import Head from 'next/head';
+import { NextPage } from 'next';
 import { mainPageData } from 'data/strings';
 import { MainWrapper } from 'layouts/MainWrapper';
-import { NextPage } from 'next';
-import Head from 'next/head';
-import React from 'react';
+import { CreateRoomForm } from 'components/CreateRoomForm';
 
 const CreateRoom: NextPage = () => {
   return (

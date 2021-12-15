@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+import { mainPageData } from 'data/strings';
+import { MainWrapper } from 'layouts/MainWrapper';
 import { IApiResponse, ssrGetRequest } from 'axiosConfig';
 import { useAppDispatch } from 'store/store';
 import { setRoom } from 'store/feaures/room';
-import { setError } from 'store/feaures/error';
-import { mainPageData } from 'data/strings';
 import toast from 'react-hot-toast';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -26,12 +26,10 @@ const Invite = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  console.log({ room });
 
   useEffect(() => {
     const login = async () => {
       if (!room) {
-        // TODO: show error message
         toast.error(mainPageData.roomNotFound);
         return router.replace('/');
       }
@@ -40,7 +38,7 @@ const Invite = ({
     };
     login();
   }, [dispatch, router, room]);
-  return null;
+  return <MainWrapper />;
 };
 
 export default Invite;

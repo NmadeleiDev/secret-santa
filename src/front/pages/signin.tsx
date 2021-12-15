@@ -1,9 +1,8 @@
-import { LoginForm } from 'components/LoginForm';
-import { mainPageData } from 'data/strings';
-import { MainWrapper } from 'layouts/MainWrapper';
-import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import { NextPage } from 'next';
+import { MainWrapper } from 'layouts/MainWrapper';
+import { mainPageData } from 'data/strings';
+import { LoginForm } from 'components/LoginForm';
 
 const Register: NextPage = () => {
   return (

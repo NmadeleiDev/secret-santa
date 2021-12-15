@@ -1,16 +1,17 @@
+import { useEffect } from 'react';
+import styled from 'styled-components';
 import { IApiResponse, makeGetRequest, ssrGetRequest } from 'axiosConfig';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+
+import { IUser } from 'types/UserType';
+import { mainPageData } from 'data/strings';
+import { MainWrapper } from 'layouts/MainWrapper';
 import Button from 'components/Button';
 import CodeBlock from 'components/CodeBlock';
 import Pair from 'components/Pair';
 import User from 'components/User';
-import { mainPageData } from 'data/strings';
-import { MainWrapper } from 'layouts/MainWrapper';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 import {
   IBasicUser,
   IRoomSlice,
@@ -24,9 +25,8 @@ import {
   userSelector,
 } from 'store/feaures/user';
 import { useAppDispatch, useAppSelector } from 'store/store';
-import styled from 'styled-components';
-import { IUser } from 'types/UserType';
 import { getRoomLink } from 'utils';
+import toast from 'react-hot-toast';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -34,6 +34,7 @@ const StyledDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   max-width: var(--desktop-width);
+  margin: 0 4rem;
 
   .h2 {
     font-size: 2.5rem;
@@ -41,6 +42,9 @@ const StyledDiv = styled.div`
   .info {
     display: flex;
     flex-direction: column;
+    .invite {
+      margin-top: 0.5rem;
+    }
   }
   .users {
     display: flex;
@@ -57,7 +61,7 @@ const StyledDiv = styled.div`
         display: none;
         position: absolute;
         right: calc(50% - 5rem);
-        bottom: -90px;
+        top: -90px;
         max-width: 10rem;
         height: auto;
         font-size: 0.8rem;
@@ -77,11 +81,6 @@ const StyledDiv = styled.div`
         }
       }
     }
-  }
-  .success {
-    color: ${({ theme }) => theme.colors.primary.main};
-    font-size: 1.5rem;
-    font-weight: 600;
   }
 `;
 
@@ -103,7 +102,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       const users = await ssrGetRequest<IApiResponse<IBasicUser[]>>(
         `room/${roomid}/users?my_id=${userid}`,
       );
-      console.log({ users: users.data });
       room.users = users.data || [];
     }
   }
@@ -115,8 +113,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       `room/${roomid}/isadmin/${userid}`,
     );
 
-    console.log({ userData, isAdminData });
-
     if (userData.data?.name && userData.data?.room_id) {
       user = {
         id: String(userid),
@@ -125,7 +121,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       };
     }
   }
-  console.log({ user, room });
   return { props: { room, user } };
 };
 
@@ -136,7 +131,6 @@ const RoomPage = ({
   const router = useRouter();
   const user = useAppSelector(userSelector);
   const room = useAppSelector(roomSelector);
-  const { success, error } = useAppSelector(errorSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -157,7 +151,6 @@ const RoomPage = ({
       if (pair.data) {
         dispatch(setRecipient(pair.data));
       }
-
       toast.success(mainPageData.lockSuccess);
     } else {
       toast.error(mainPageData.genericError);
@@ -173,43 +166,50 @@ const RoomPage = ({
     return (
       <>
         <Head>
-          <title>{mainPageData.roomTitle}</title>
+          <title>{mainPageData.roomForFriends}</title>
         </Head>
         <MainWrapper>
           <StyledDiv>
-            <h2 className="h2">{mainPageData.room}не найдена</h2>
+            <h1 className="h1">{mainPageData.room}не найдена</h1>
           </StyledDiv>
         </MainWrapper>
       </>
     );
   }
 
+  if (!user.id) {
+    toast(mainPageData.userNotFound, { id: 'notFound' });
+    router.replace('/');
+    return <MainWrapper />;
+  }
+
   return (
     <>
       <Head>
-        <title>{mainPageData.roomTitle}</title>
+        <title>
+          {mainPageData.room}
+          {room.name}
+        </title>
       </Head>
       <MainWrapper>
         <StyledDiv>
-          <h2 className="h2">
+          <h1 className="h1">
             {mainPageData.room}
             {room.name}
-          </h2>
-          <span className="info">
+          </h1>
+          <section className="info">
             {mainPageData.usersQuantity} {room.users?.length}
-            {user?.room_id !== '' && (
-              <div className="invite">
-                {mainPageData.invitation}
-                <CodeBlock text={getRoomLink(user.room_id)} />
-              </div>
-            )}
+            <div className="invite">
+              {mainPageData.invitation}
+              <CodeBlock text={getRoomLink(user.room_id)} />
+            </div>
             <div className="code">
               {mainPageData.yourCode}
               <CodeBlock text={user.id} />
             </div>
-          </span>
+          </section>
           <Pair userid={user.id} users={room.users} />
-          <div className="users">
+          <section className="users">
             {room?.users?.map((el, i) => (
               <User
                 name={el.name}
@@ -218,12 +218,8 @@ const RoomPage = ({
                 enableDelete={user.isAdmin || false}
               />
             ))}
-          </div>
-          <div className="success">{success}</div>
-          <div className="buttons">
-            <Button onClick={handleBack} variant="text">
-              {mainPageData.back}
-            </Button>
+          </section>
+          <section className="buttons">
             {user?.isAdmin && (
               <Button
                 className="primary-button"
@@ -239,7 +235,10 @@ const RoomPage = ({
                 )}
               </Button>
             )}
-          </div>
+            <Button onClick={handleBack} variant="text">
+              {mainPageData.back}
+            </Button>
+          </section>
         </StyledDiv>
       </MainWrapper>
     </>

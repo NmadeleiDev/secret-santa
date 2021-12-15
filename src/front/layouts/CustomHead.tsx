@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { mockMeta } from 'data/strings';
 

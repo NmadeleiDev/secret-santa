@@ -1,18 +1,15 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import styled from 'styled-components';
 import * as Yup from 'yup';
+import { useRouter } from 'next/router';
+import { mainPageData } from 'data/strings';
 import { TextInput } from './Input';
 import Button from './Button';
 import { IApiResponse, makePostRequest } from 'axiosConfig';
-import { useRouter } from 'next/router';
-import { useAppDispatch, useAppSelector } from 'store/store';
-import React from 'react';
-import { mainPageData } from 'data/strings';
-import { useLocalStorage } from 'hooks/useLocalStorage';
+import { useAppDispatch } from 'store/store';
 import { IRoom } from 'types/RoomType';
 import { setUser } from 'store/feaures/user';
 import { setRoom } from 'store/feaures/room';
-import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 import toast from 'react-hot-toast';
 
 export interface Values {
@@ -21,22 +18,26 @@ export interface Values {
   likes: string;
   dislikes: string;
 }
-const StyledForm = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledDiv = styled.div`
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 4rem;
 
-  .error {
-    color: ${({ theme }) => theme.colors.primary.main};
-    font-size: 1rem;
+    .legend {
+      font-weight: 600;
+    }
+
+    .buttons {
+      text-align: center;
+    }
   }
 `;
 
 export const CreateRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { putItem } = useLocalStorage();
-  const { error } = useAppSelector(errorSelector);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -80,7 +81,6 @@ export const CreateRoomForm = () => {
     console.log({ roomId });
 
     if (roomId?.data) {
-      putItem('roomId', roomId.data);
       dispatch(
         setUser({
           ...user,
@@ -104,41 +104,44 @@ export const CreateRoomForm = () => {
       onSubmit={onSubmitHandler}
     >
       {({ isSubmitting, isValidating }) => (
-        <StyledForm>
-          <h2>{mainPageData.createRoomForm}</h2>
-          <TextInput name="username" type="text" placeholder="Твое имя" />
-          <TextInput
-            name="roomname"
-            type="text"
-            placeholder="Название комнаты"
-          />
-          <div className="interests">
-            <h4 className="h4">{mainPageData.interests}</h4>
-            <TextInput
-              name="likes"
-              type="text"
-              placeholder="Что тебе нравится"
-            />
-            <TextInput
-              name="dislikes"
-              type="text"
-              placeholder="Что тебе не нравится"
-            />
-          </div>
-          {error && <div className="error">{error}</div>}
-          <div className="buttons">
-            <Button onClick={handleBack} variant="text">
-              {mainPageData.back}
-            </Button>
-            <Button
-              disabled={!isValidating && isSubmitting}
-              type="submit"
-              variant="primary"
-            >
-              {mainPageData.create}
-            </Button>
-          </div>
-        </StyledForm>
+        <StyledDiv>
+          <h1>{mainPageData.createRoomForm}</h1>
+          <Form className="form">
+            <fieldset className="generalInfo">
+              <TextInput name="username" type="text" placeholder="Твое имя" />
+              <TextInput
+                name="roomname"
+                type="text"
+                placeholder="Название комнаты"
+              />
+            </fieldset>
+            <fieldset className="interests">
+              <legend className="legend">{mainPageData.interests}</legend>
+              <TextInput
+                name="likes"
+                type="text"
+                placeholder="Что тебе нравится"
+              />
+              <TextInput
+                name="dislikes"
+                type="text"
+                placeholder="Что тебе не нравится"
+              />
+            </fieldset>
+            <fieldset className="buttons">
+              <Button
+                disabled={!isValidating && isSubmitting}
+                type="submit"
+                variant="primary"
+              >
+                {mainPageData.create}
+              </Button>
+              <Button onClick={handleBack} variant="text">
+                {mainPageData.back}
+              </Button>
+            </fieldset>
+          </Form>
+        </StyledDiv>
       )}
     </Formik>
   );

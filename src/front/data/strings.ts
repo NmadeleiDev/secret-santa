@@ -28,6 +28,7 @@ export const mainPageData = {
   signup: 'Зарегистрироваться',
   register: 'зарегистрируйся',
   room: 'Комната ',
+  roomForFriends: 'Комната для друзей',
   createRoomForm: 'Новая комната',
   usersQuantity: 'Количество пользователей в комнате: ',
   genericError: 'Упс... Что-то пошло не так',

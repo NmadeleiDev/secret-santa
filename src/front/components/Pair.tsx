@@ -1,17 +1,19 @@
-import { IApiResponse, makeGetRequest } from 'axiosConfig';
-import React, { useEffect, useState } from 'react';
-import { IUser } from 'types/UserType';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IBasicUser } from 'store/feaures/room';
 import { mainPageData } from 'data/strings';
+import { IApiResponse, makeGetRequest } from 'axiosConfig';
+import { IUser } from 'types/UserType';
+import { IBasicUser } from 'store/feaures/room';
 import { useAppDispatch, useAppSelector } from 'store/store';
 import { setRecipient, userSelector } from 'store/feaures/user';
 
 const StyledDiv = styled.div`
-  .h4-pair {
+  .h2 {
     font-size: 2rem;
     color: ${({ theme }) => theme.colors.text.dark};
     margin-bottom: 1rem;
+    text-align: center;
+
     .name {
       color: ${({ theme }) => theme.colors.primary.main};
     }
@@ -51,7 +53,6 @@ const Pair = ({ userid, users }: PairProps) => {
       const pair = await makeGetRequest<IApiResponse<IUser>>(
         `user/${userid}/recipient`,
       );
-      console.log({ pair, users });
 
       if (pair.error) {
         setError(mainPageData.pairsNotSet);
@@ -68,10 +69,10 @@ const Pair = ({ userid, users }: PairProps) => {
     <StyledDiv>
       {recipient && (
         <>
-          <h4 className="h4-pair">
+          <h2 className="h2">
             Тебе выпало быть Сантой для{' '}
             <span className="name">{recipient.name}</span>
-          </h4>
+          </h2>
           <div className="interests">
             {recipient.likes && (
               <>

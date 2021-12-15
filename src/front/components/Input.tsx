@@ -1,6 +1,6 @@
-import { useField } from 'formik';
 import styled from 'styled-components';
 import cn from 'classnames';
+import { useField } from 'formik';
 
 export interface ITextInputProps {
   name: string;

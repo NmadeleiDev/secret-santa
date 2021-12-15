@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { CopyButton } from './Button';
 import styled from 'styled-components';
 
@@ -17,11 +17,6 @@ const StyledDiv = styled.span<{ main?: boolean }>`
     ${({ theme, main }) =>
       main ? theme.colors.white : theme.colors.secondary.dark};
   border-radius: 5px;
-
-  a {
-    color: ${({ theme, main }) =>
-      main ? theme.colors.white : theme.colors.text.dark};
-  }
 `;
 
 interface Props {

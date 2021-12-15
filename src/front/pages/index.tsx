@@ -1,10 +1,10 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
-import { MainWrapper } from 'layouts/MainWrapper';
-import Button from 'components/Button';
-import { mainPageData } from 'data/strings';
+import type { NextPage } from 'next';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { mainPageData } from 'data/strings';
+import { MainWrapper } from 'layouts/MainWrapper';
+import Button from 'components/Button';
 
 const StyledMain = styled.main`
   max-width: var(--desctop-width);

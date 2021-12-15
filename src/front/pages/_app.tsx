@@ -1,13 +1,13 @@
 import 'styles/index.css';
-import { ThemeProvider } from 'styled-components';
 import type { AppProps } from 'next/app';
-import theme from 'styles/theme';
+import { useEffect } from 'react';
+import ym, { YMInitializer } from 'react-yandex-metrika';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import { useRouter } from 'next/router';
+import theme from 'styles/theme';
 import { store } from 'store/store';
 import Snowfall from 'react-snowfall';
-import ym, { YMInitializer } from 'react-yandex-metrika';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 export const host =
