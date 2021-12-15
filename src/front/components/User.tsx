@@ -9,6 +9,7 @@ import { setRecipient, userSelector } from 'store/feaures/user';
 import { IApiResponse, makeGetRequest } from 'axiosConfig';
 import { removeUser, roomSelector } from 'store/feaures/room';
 import { IUser } from 'types/UserType';
+import toast from 'react-hot-toast';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -104,6 +105,7 @@ const User = ({ name, id, enableDelete, className }: Props) => {
       );
       if (pair.data) {
         dispatch(setRecipient(pair.data));
+        toast.success(mainPageData.relockSuccess);
       }
     }
   };

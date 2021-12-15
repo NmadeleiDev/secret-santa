@@ -8,6 +8,7 @@ import Snowfall from 'react-snowfall';
 import ym, { YMInitializer } from 'react-yandex-metrika';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 export const host =
   process.env.NODE_ENV === 'production'
@@ -44,6 +45,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         <YMInitializer
           accounts={[+process.env.NEXT_PUBLIC_YM_ID]}
           options={{ defer: true }}
+        />
+        <Toaster
+          position="bottom-left"
+          reverseOrder={false}
+          toastOptions={{
+            success: {
+              style: {
+                background: theme.colors.accent.green,
+              },
+            },
+            error: {
+              style: {
+                background: theme.colors.primary.main,
+                color: theme.colors.white,
+              },
+            },
+          }}
         />
         <Component {...pageProps} />
         <Snowfall color="white" />

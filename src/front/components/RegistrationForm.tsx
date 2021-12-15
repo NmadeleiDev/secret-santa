@@ -20,6 +20,7 @@ import { IUser } from 'types/UserType';
 import { UUID_REGEX } from 'utils';
 import { errorSelector, setError } from 'store/feaures/error';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export interface Values {
   name: string;
@@ -106,7 +107,7 @@ export const RegistrationForm = () => {
       return;
     }
     if (room.users?.find((user) => user.name === values.name)) {
-      dispatch(setError(mainPageData.chooseAnotherName));
+      toast.error(mainPageData.chooseAnotherName);
       return;
     }
 
@@ -123,8 +124,7 @@ export const RegistrationForm = () => {
       dispatch(setUser({ ...user, id: userId.data }));
       router.push(`/room?userid=${userId.data}&roomid=${room.id}`);
     } else {
-      dispatch(setError(mainPageData.genericError));
-      setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.genericError);
     }
   };
   const handleBack = (e: React.FormEvent) => {

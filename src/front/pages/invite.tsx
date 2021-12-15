@@ -6,6 +6,7 @@ import { useAppDispatch } from 'store/store';
 import { setRoom } from 'store/feaures/room';
 import { setError } from 'store/feaures/error';
 import { mainPageData } from 'data/strings';
+import toast from 'react-hot-toast';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
@@ -31,8 +32,7 @@ const Invite = ({
     const login = async () => {
       if (!room) {
         // TODO: show error message
-        dispatch(setError(mainPageData.roomNotFound));
-        setTimeout(() => dispatch(setError('')), 3000);
+        toast.error(mainPageData.roomNotFound);
         return router.replace('/');
       }
       dispatch(setRoom(room));

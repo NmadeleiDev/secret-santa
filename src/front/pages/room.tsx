@@ -9,6 +9,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { errorSelector, setError, setSuccess } from 'store/feaures/error';
 import {
   IBasicUser,
@@ -157,11 +158,9 @@ const RoomPage = ({
         dispatch(setRecipient(pair.data));
       }
 
-      dispatch(setSuccess(mainPageData.lockSuccess));
-      setTimeout(() => dispatch(setSuccess('')), 3000);
+      toast.success(mainPageData.lockSuccess);
     } else {
-      dispatch(setError(mainPageData.genericError));
-      setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.genericError);
     }
   };
 

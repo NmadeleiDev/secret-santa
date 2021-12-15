@@ -35,14 +35,14 @@ const Home: NextPage = () => {
             <p className="description">{mainPageData.description}</p>
           </section>
           <section>
-            <Link href="/enterroom">
-              <a>
-                <Button variant="outline">{mainPageData.enterRoom}</Button>
-              </a>
-            </Link>
             <Link href="/create">
               <a>
                 <Button variant="primary">{mainPageData.createRoom}</Button>
+              </a>
+            </Link>
+            <Link href="/enterroom">
+              <a>
+                <Button variant="outline">{mainPageData.enterRoom}</Button>
               </a>
             </Link>
           </section>

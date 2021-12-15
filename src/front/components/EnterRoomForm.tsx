@@ -11,7 +11,8 @@ import { IUser } from 'types/UserType';
 import { mainPageData } from 'data/strings';
 import { errorSelector, setError } from 'store/feaures/error';
 import { setRoom } from 'store/feaures/room';
-import { UUID_REGEX, UUID_REGEX_GROUP } from 'utils';
+import { UUID_REGEX_GROUP } from 'utils';
+import toast from 'react-hot-toast';
 
 export interface Values {
   id: string;
@@ -31,7 +32,6 @@ const StyledForm = styled(Form)`
 export const EnterRoomForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { error } = useAppSelector(errorSelector);
   const validationSchema = Yup.object().shape({
     id: Yup.string()
       .matches(UUID_REGEX_GROUP, mainPageData.wrongFormat)
@@ -54,8 +54,7 @@ export const EnterRoomForm = () => {
       dispatch(setRoom({ id, name: roomName.data }));
       router.push('/signin');
     } else {
-      dispatch(setError(mainPageData.roomNotFound));
-      setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.roomNotFound);
     }
   };
   const handleBack = (e: React.FormEvent) => {
@@ -84,7 +83,6 @@ export const EnterRoomForm = () => {
               {mainPageData.enter}
             </Button>
           </div>
-          {error && <div className="error">{error}</div>}
         </StyledForm>
       )}
     </Formik>

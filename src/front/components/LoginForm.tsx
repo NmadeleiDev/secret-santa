@@ -20,6 +20,7 @@ import { IUser } from 'types/UserType';
 import { UUID_REGEX } from 'utils';
 import { errorSelector, setError } from 'store/feaures/error';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export interface Values {
   uuid: string;
@@ -57,17 +58,12 @@ const StyledForm = styled(Form)`
 export const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { putItem } = useLocalStorage();
   const room = useAppSelector(roomSelector);
   const { error } = useAppSelector(errorSelector);
 
   useEffect(() => {
     if (!room.id) {
-      console.log('Комната не найдена, попробуйте зайти с главной страницы', {
-        room,
-      });
-      //   dispatch(setError(mainPageData.roomNotFoundGoHome));
-      //   setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.roomNotFoundGoHome);
       router.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,8 +101,7 @@ export const LoginForm = () => {
         router.push(`/room?userid=${values.uuid}&roomid=${room.id}`);
       }
     } else {
-      dispatch(setError(mainPageData.userNotFound));
-      setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.userNotFound);
     }
     setSubmitting(false);
   };

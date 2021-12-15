@@ -13,6 +13,7 @@ import { IRoom } from 'types/RoomType';
 import { setUser } from 'store/feaures/user';
 import { setRoom } from 'store/feaures/room';
 import { errorSelector, setError, setSuccess } from 'store/feaures/error';
+import toast from 'react-hot-toast';
 
 export interface Values {
   username: string;
@@ -67,8 +68,7 @@ export const CreateRoomForm = () => {
     const userId = await makePostRequest<IApiResponse<string>>('/user', user);
 
     if (userId.error || !userId.data) {
-      dispatch(setError(mainPageData.genericError));
-      setTimeout(() => dispatch(setError('')), 3000);
+      toast.error(mainPageData.genericError);
       return;
     }
     const room: IRoom = {

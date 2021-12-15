@@ -54,7 +54,7 @@ const Pair = ({ userid, users }: PairProps) => {
       console.log({ pair, users });
 
       if (pair.error) {
-        setError('Пары еще не назначены. Это может сделать админ комнаты');
+        setError(mainPageData.pairsNotSet);
         return;
       } else if (pair.data) {
         dispatch(setRecipient(pair.data));
@@ -70,7 +70,7 @@ const Pair = ({ userid, users }: PairProps) => {
         <>
           <h4 className="h4-pair">
             Тебе выпало быть Сантой для{' '}
-            <span className="name">{recipient?.name}</span>
+            <span className="name">{recipient.name}</span>
           </h4>
           <div className="interests">
             {recipient.likes && (
