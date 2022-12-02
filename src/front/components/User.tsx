@@ -124,13 +124,13 @@ const User = ({ name, id, enableDelete, className }: Props) => {
   };
   return (
     <StyledDiv className={className}>
-      <Image
-        className="avatar"
-        src={url}
-        width={60}
-        height={60}
-        alt={`${name}'s' avatar`}
-      />
+      {/*<Image*/}
+      {/*  className="avatar"*/}
+      {/*  src={url}*/}
+      {/*  width={60}*/}
+      {/*  height={60}*/}
+      {/*  alt={`${name}'s' avatar`}*/}
+      {/*/>*/}
       <div className="name">{name}</div>
       {enableDelete && id !== user.id ? (
         <Button onClick={deleteUser} variant="text" className="button">
