@@ -17,8 +17,6 @@ class DbManager():
         self.user = os.getenv('POSTGRES_USER')
         self.password = os.getenv('POSTGRES_PASSWORD')
 
-        logging.info("Establishing db connection... {}".format(
-            (self.db_name, self.user, self.password, self.host, self.port)))
         self.conn = psycopg2.connect(
             database=self.db_name, user=self.user, password=self.password, host=self.host, port=self.port)
 

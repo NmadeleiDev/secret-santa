@@ -17,8 +17,7 @@ build: ## build all containers (docker compose)
 	docker-compose build
 
 up: ## build & start the project (docker-compose)
-	cp .env ./src/front/.env
-	docker-compose up --build -d
+	cp .env ./src/front/.env && export DOCKER_DEFAULT_PLATFORM=linux/amd64 && docker-compose up --build -d
 
 up-it: ## build & start the project (docker-compose)
 	docker-compose up --build
