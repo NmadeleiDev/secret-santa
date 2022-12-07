@@ -13,10 +13,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-      DEV_MODE: ${DEV_MODE}
-    restart: always
-    # ports:
-    #   - 2222:2222
     depends_on:
       - db
 
@@ -46,8 +42,6 @@ services:
     restart: always
 
   front:
-    # ports:
-    #   - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
     hostname: front
     build:
       context: ./src/front
